@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Direct Tools: Transfer, QR, Convert</title>
+    <title>Direct Tools: Home</title>
     <!-- QR Code Library -->
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-    <!-- MP3 Encoder Library (LAME) - Loaded from CDN (No Integrity Check) -->
+    <!-- MP3 Encoder Library (LAME) - Loaded from CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.1/lame.min.js"></script>
     <style>
         /* All CSS Styles Remain the Same */
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
         :root{--primary-color:#007bff;--primary-dark:#0056b3;--secondary-color:#6c757d;--success-color:#28a745;--success-dark:#1e7e34;--danger-color:#dc3545;--danger-dark:#a71d2a;--warning-color:#ffc107;--warning-dark:#d39e00;--info-color:#17a2b8;--info-dark:#117a8b;--light-gray:#f8f9fa;--medium-gray:#e9ecef;--dark-gray:#343a40;--border-color:#ced4da;--text-color:#212529;--text-light:#f8f9fa;--container-bg:#ffffff;--shadow-sm:0 1px 3px rgba(0,0,0,0.1);--shadow-md:0 4px 8px rgba(0,0,0,0.1);--border-radius:6px;}
-        body{font-family:'Roboto',sans-serif;background-color:var(--light-gray);color:var(--text-color);margin:0;padding:20px;line-height:1.6;}
+        body{font-family:'Roboto',sans-serif;background-color:var(--light-gray);color:var(--text-color);margin:0;padding:20px;line-height:1.6; overflow-x: hidden;}
         .container{background-color:var(--container-bg);padding:30px;border-radius:var(--border-radius);box-shadow:var(--shadow-md);width:90%;max-width:650px;margin:60px auto 20px auto;border:1px solid var(--border-color);}
         h3{color:var(--dark-gray);margin-bottom:15px;border-bottom:1px solid var(--medium-gray);padding-bottom:10px;font-size:1.3em;margin-top:0;}
         h4{color:var(--dark-gray);margin-top:0;margin-bottom:10px;font-size:1.1em;font-weight:700;}
@@ -40,6 +40,7 @@
         .converter-progress progress{width:100%;height:10px;margin-top:5px;}
         .bitrate-selector label{display:inline-block;margin-right:10px;margin-bottom:0;vertical-align:middle;}
         .bitrate-selector select{padding:6px 10px;border:1px solid var(--border-color);border-radius:var(--border-radius);font-size:.9em;vertical-align:middle;cursor:pointer;}
+        .error-message { color: var(--danger-dark); font-size: 0.85em; text-align: center; margin-top: 5px; min-height: 1.2em; }
         button{padding:10px 18px;margin:5px 3px;border:none;border-radius:var(--border-radius);cursor:pointer;font-size:.95em;font-weight:500;color:var(--text-light);background-image:linear-gradient(to bottom,var(--primary-color),var(--primary-dark));border:1px solid var(--primary-dark);box-shadow:var(--shadow-sm);transition:background-color .2s ease,transform .1s ease,box-shadow .1s ease,background-image .2s ease;line-height:1.5;vertical-align:middle;}
         button:hover{background-image:linear-gradient(to bottom,#0069d9,#00458f);}
         button:active{transform:translateY(1px);box-shadow:none;}
@@ -76,7 +77,7 @@
         #selectedFilesList{margin-top:10px;max-height:150px;overflow-y:auto;background-color:#fff;border:1px dashed var(--border-color);padding:10px;border-radius:var(--border-radius);font-size:.9em;}
         #selectedFilesList div{padding:3px 0;border-bottom:1px solid var(--medium-gray);}
         #selectedFilesList div:last-child{border-bottom:none;}
-        #clickSound,#errorSound{display:none;}
+        /* #clickSound,#errorSound{display:none;} */
         #menuToggleBtn{position:fixed;top:15px;right:15px;z-index:1002;background-color:var(--secondary-color);border:none;padding:10px;cursor:pointer;border-radius:var(--border-radius);box-shadow:var(--shadow-sm);width:40px;height:40px;display:flex;flex-direction:column;justify-content:space-around;align-items:center;background-image:none;}
         #menuToggleBtn span{display:block;width:20px;height:2px;background-color:var(--text-light);border-radius:1px;transition:all .3s ease-in-out;}
         #menuToggleBtn.active span:nth-child(1){transform:translateY(6px) rotate(45deg);}
@@ -88,6 +89,8 @@
         #sideMenu button{display:block;width:100%;margin-bottom:15px;text-align:left;padding:12px 15px;}
         #refreshAppBtn{background-image:linear-gradient(to bottom,var(--info-color),var(--info-dark));border-color:var(--info-dark);}
         #refreshAppBtn:hover{background-image:linear-gradient(to bottom,#17a2b8,#106d7a);}
+        #homeMenuBtn { background-image: linear-gradient(to bottom, #5a6268, var(--secondary-color)); border-color: #4e555b; }
+        #homeMenuBtn:hover { background-image: linear-gradient(to bottom, #4e555b, #444a50); }
         #fileTransferMenuBtn,#qrGeneratorMenuBtn,#audioConverterMenuBtn{background-image:linear-gradient(to bottom,var(--primary-color),var(--primary-dark));border-color:var(--primary-dark);}
         #fileTransferMenuBtn:hover,#qrGeneratorMenuBtn:hover,#audioConverterMenuBtn:hover{background-image:linear-gradient(to bottom,#0069d9,#00458f);}
         #closeMenuBtn{position:absolute;top:10px;right:10px;width:30px;height:30px;padding:0;font-size:1.8em;line-height:1;text-align:center;background:0 0;border:none;color:var(--secondary-color);cursor:pointer;box-shadow:none;}
@@ -97,111 +100,76 @@
         #qrCodeDisplay{margin-top:20px;padding:15px;border:1px dashed var(--border-color);border-radius:var(--border-radius);background-color:var(--light-gray);min-height:150px;display:flex;justify-content:center;align-items:center;overflow:hidden;position:relative;}
         #qrCodeDisplay img,#qrCodeDisplay canvas{max-width:100%;height:auto;display:block;background-color:#fff;padding:5px;box-sizing:border-box;border:1px solid var(--medium-gray);}
         #qrCodeDisplay span{color:var(--secondary-color);font-style:italic;}
+        /* --- Home Page Specific Styles --- */
+         #homePageApp .container { text-align: center; }
+        #homePageApp h3 { font-size: 1.8em; border-bottom: none; margin-bottom: 5px; }
+        #homePageApp .subtitle { font-size: 0.95em; font-style: italic; color: var(--secondary-color); text-align: center; margin-top: 0px; margin-bottom: 35px; }
+        #homePageApp .tool-description { text-align: center; margin-bottom: 30px; color: var(--dark-gray); font-size: 1.05em; }
+        #homePageApp .tool-buttons button { display: block; width: 85%; max-width: 300px; margin: 18px auto; padding: 15px 20px; font-size: 1.05em; text-align: center; }
+        #about-section { margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--medium-gray); text-align: left; }
+        #about-section h4 { text-align: center; margin-bottom: 15px; font-size: 1.2em; }
+        #about-section p { font-size: 0.95em; margin-bottom: 15px; line-height: 1.7; color: #444; }
+        #about-section strong { color: var(--dark-gray); }
+        /* Hidden Audio Elements */
+        audio[controls] { display: none !important; }
+
     </style>
 </head>
 <body>
 
-    <!-- Hamburger Menu Toggle Button -->
-    <button id="menuToggleBtn" aria-label="Open Menu" aria-expanded="false">
-        <span></span>
-        <span></span>
-        <span></span>
-    </button>
-
-    <!-- Side Menu Panel (Initially Hidden) -->
-    <div id="sideMenu">
-        <h4>Menu</h4>
-        <button id="fileTransferMenuBtn">File Transfer</button>
-        <button id="qrGeneratorMenuBtn">QR Code Generator</button>
-        <button id="audioConverterMenuBtn">Audio Converter</button>
-        <hr style="margin: 15px 0;">
-        <button id="refreshAppBtn">Refresh App</button>
-        <button id="closeMenuBtn" aria-label="Close Menu">×</button>
-    </div>
-
-    <!-- Overlay for background click -->
+    <button id="menuToggleBtn" aria-label="Open Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    <div id="sideMenu"><h4>Menu</h4> <button id="homeMenuBtn">Home</button> <button id="fileTransferMenuBtn">File Transfer</button> <button id="qrGeneratorMenuBtn">QR Code Generator</button> <button id="audioConverterMenuBtn">Audio Converter</button> <hr style="margin: 15px 0;"> <button id="refreshAppBtn">Refresh App</button> <button id="closeMenuBtn" aria-label="Close Menu">×</button></div>
     <div id="menuOverlay"></div>
 
-    <!-- Main Content Area - Wrapper for File Transfer -->
-    <div id="mainFileTransferApp" style="display: block;">
-         <div class="container">
-            <div id="connection-setup">
-                <h3>Connect Devices</h3>
-                <div class="instructions"><h4>How to Connect:</h4> <p><strong>Device 1 (Sender):</strong> Click 'Create Code', copy the generated text.</p> <p><strong>Device 2 (Receiver):</strong> Paste Sender's text into 'Paste Code Here', click 'Submit'. Copy the new text generated.</p> <p><strong>Device 1 (Sender):</strong> Paste Receiver's text into 'Paste Code Here', click 'Submit'. Wait for 'Connected' status.</p></div>
-                <button id="createOfferBtn">Create Code (Sender)</button> <br><br>
-                <label for="localSdp">Your Code (Copy ALL Text Below):</label> <textarea id="localSdp" readonly placeholder="Connection code will appear here..."></textarea>
-                <label for="remoteSdp">Paste Code Here:</label> <textarea id="remoteSdp" placeholder="Paste connection code from the other device here..."></textarea>
-                <button id="submitSdpBtn">Submit Code</button>
-                <div class="status disconnected" id="connectionStatus">Status: Disconnected</div>
-            </div> <hr>
-            <div id="file-transfer" style="display: none;">
-                <h3>Transfer File</h3> <label for="fileInput">Choose File(s) to Add:</label>
-                <input type="file" id="fileInput" disabled multiple>
-                <div id="selectedFilesList">No files selected yet. Click 'Choose File(s)' to add.</div>
-                <div style="margin-top: 10px;"> <button id="sendFileBtn" disabled>Send Selected File(s)</button> <button id="clearSelectionBtn" disabled>Clear Selection</button> </div>
-                <div class="file-info" id="fileInfo">Total: 0 files (0 Bytes)</div>
-                <div class="progress-info" id="progressInfo"> Progress: <span id="progressText">0%</span> <progress id="progressBar" value="0" max="100"></progress> </div>
-                <div class="status info" id="transferStatus">Status: Idle</div>
-                <div id="downloadLinksContainer"></div>
+    <!-- Home Page Section -->
+    <div id="homePageApp" style="display: none;">
+        <div class="container">
+            <h3>All Tools</h3>
+            <p class="subtitle">Made by Tausif</p>
+            <p class="tool-description">Choose a tool to get started:</p>
+            <div class="tool-buttons">
+                <button id="goToFtBtn">🔗 File Transfer</button>
+                <button id="goToQrBtn">📱 QR Code Generator</button>
+                <button id="goToAcBtn">🎵 Audio Converter</button>
             </div>
+            <section id="about-section">
+                 <hr> <h4>About Tools</h4>
+                 <!-- Updated User-Friendly Descriptions -->
+                 <p><strong>File Transfer:</strong> Securely transfer files directly between two devices, no matter where they are. Just follow the 3-step code exchange process to create a direct connection.</p>
+                 <p><strong>QR Code Generator:</strong> Easily create QR codes for website links (URLs) or any custom text. You can optionally add your logo in the middle. Download the final QR code image to share or print.</p>
+                 <p><strong>Audio Converter:</strong> Change your audio or video files (MP4, M4A, WAV) into the popular MP3 format directly in your browser. Choose the desired MP3 quality (bitrate). The conversion happens right here, so bigger files might take a moment.</p>
+             </section>
         </div>
-    </div> <!-- End of mainFileTransferApp Wrapper -->
+    </div>
 
-    <!-- QR Code Generator Section (Initially Hidden) -->
+    <!-- File Transfer Section -->
+    <div id="mainFileTransferApp" style="display: none;">
+         <div class="container">
+            <div id="connection-setup"><h3>Connect Devices</h3> <div class="instructions"><h4>How to Connect:</h4> <p><strong>Device 1 (Sender):</strong> Click 'Create Code', copy the generated text.</p> <p><strong>Device 2 (Receiver):</strong> Paste Sender's text into 'Paste Code Here', click 'Submit'. Copy the new text generated.</p> <p><strong>Device 1 (Sender):</strong> Paste Receiver's text into 'Paste Code Here', click 'Submit'. Wait for 'Connected' status.</p></div> <button id="createOfferBtn">Create Code (Sender)</button> <br><br> <label for="localSdp">Your Code:</label> <textarea id="localSdp" readonly placeholder="Code appears here..."></textarea> <label for="remoteSdp">Paste Code Here:</label> <textarea id="remoteSdp" placeholder="Paste code from other device..."></textarea> <button id="submitSdpBtn">Submit Code</button> <div id="submitSdpErrorMsg" class="error-message"></div> <div class="status disconnected" id="connectionStatus">Status: Disconnected</div></div> <hr>
+            <div id="file-transfer" style="display: none;"> <h3>Transfer File</h3> <label for="fileInput">Choose File(s):</label> <input type="file" id="fileInput" disabled multiple> <div id="selectedFilesList">No files selected yet.</div> <div style="margin-top: 10px;"> <button id="sendFileBtn" disabled>Send Selected</button> <button id="clearSelectionBtn" disabled>Clear Selection</button> </div> <div class="file-info" id="fileInfo">Total: 0 files (0 Bytes)</div> <div class="progress-info" id="progressInfo"> Progress: <span id="progressText">0%</span> <progress id="progressBar" value="0" max="100"></progress> </div> <div class="status info" id="transferStatus">Status: Idle</div> <div id="downloadLinksContainer"></div> </div>
+        </div>
+    </div>
+
+    <!-- QR Code Generator Section -->
     <div id="qrCodeGeneratorApp" class="container" style="display: none;">
-         <h3>QR Code Generator</h3>
-         <label>Select Input Type:</label>
-         <div class="radio-group"> <label> <input type="radio" name="qrInputType" value="link" id="qrTypeLink" checked> Link/URL </label> <label> <input type="radio" name="qrInputType" value="text" id="qrTypeText"> Text </label> </div>
-         <label for="qrInput">Enter Content:</label> <textarea id="qrInput" placeholder="Please enter your link here..."></textarea>
-         <div class="logo-upload-area"> <label for="logoInput">Upload Logo/Image (Optional):</label> <input type="file" id="logoInput" accept="image/*"> <div id="logoPreview"> <span>No logo selected</span> <button id="clearLogoBtn" disabled style="margin-left: auto;">Clear Logo</button> </div> </div>
-         <button id="generateQrBtn">Generate QR Code</button> <button id="downloadQrBtn" style="display: none;">Download QR Code</button>
-         <div id="qrCodeDisplay"> <span>QR Code will appear here</span> </div>
-         <div class="status info" id="qrStatus" style="margin-top: 15px;">Status: Ready</div>
-    </div> <!-- End of qrCodeGeneratorApp -->
+         <h3>QR Code Generator</h3> <label>Input Type:</label> <div class="radio-group"> <label> <input type="radio" name="qrInputType" value="link" id="qrTypeLink" checked> Link/URL </label> <label> <input type="radio" name="qrInputType" value="text" id="qrTypeText"> Text </label> </div> <label for="qrInput">Content:</label> <textarea id="qrInput" placeholder="https://example.com"></textarea> <div class="logo-upload-area"> <label for="logoInput">Logo (Optional):</label> <input type="file" id="logoInput" accept="image/*"> <div id="logoPreview"> <span>No logo selected</span> <button id="clearLogoBtn" disabled style="margin-left: auto;">Clear Logo</button> </div> </div> <button id="generateQrBtn">Generate QR Code</button> <div id="generateQrErrorMsg" class="error-message"></div> <button id="downloadQrBtn" style="display: none;">Download QR</button> <div id="qrCodeDisplay"> <span>QR Code appears here</span> </div> <div class="status info" id="qrStatus" style="margin-top: 15px;">Status: Ready</div>
+    </div>
 
-     <!-- Audio Converter Section (Initially Hidden) -->
+     <!-- Audio Converter Section -->
     <div id="audioConverterApp" class="container" style="display: none;">
-        <h3>Audio Converter (MP4/M4A to MP3)</h3>
-
-        <label for="audioInput">Choose Audio/Video File:</label>
-        <input type="file" id="audioInput" accept="audio/mp4, audio/x-m4a, video/mp4, .m4a">
-        <div id="audioFileInfo" class="file-info-display">No file selected</div>
-
-        <div class="bitrate-selector" style="margin-top: 15px; margin-bottom: 15px;">
-            <label for="mp3Bitrate">MP3 Bitrate (kbps):</label>
-            <select id="mp3Bitrate">
-                <option value="128" selected>128 (Good Quality)</option>
-                <option value="192">192 (High Quality)</option>
-                <option value="256">256 (Very High Quality)</option>
-                <option value="320">320 (Near CD Quality)</option>
-            </select>
-        </div>
-
-        <button id="convertAudioBtn" disabled>Convert to MP3</button>
-
-        <div class="converter-progress">
-             <div class="status info" id="converterStatus">Status: Idle</div>
-             <span id="converterProgressText">Progress: 0%</span>
-             <progress id="converterProgressBar" value="0" max="100"></progress>
-             <!-- Removed the lamejs-check div -->
-        </div>
-
-        <div id="mp3DownloadLinkContainer">
-            <!-- Download link will appear here -->
-        </div>
-    </div> <!-- End of audioConverterApp -->
-
+        <h3>Audio Converter</h3> <label for="audioInput">Choose File (.mp4, .m4a, .wav):</label> <input type="file" id="audioInput" accept="audio/mp4, audio/x-m4a, video/mp4, .m4a, audio/wav, .wav"> <div id="audioFileInfo" class="file-info-display">No file selected</div> <div class="bitrate-selector" style="margin: 15px 0;"> <label for="mp3Bitrate">Bitrate (kbps):</label> <select id="mp3Bitrate"> <option value="128" selected>128</option> <option value="192">192</option> <option value="256">256</option> <option value="320">320</option> </select> </div> <button id="convertAudioBtn">Convert to MP3</button> <div id="convertAudioErrorMsg" class="error-message"></div> <div class="converter-progress"> <div class="status info" id="converterStatus">Status: Idle</div> <span id="converterProgressText">Progress: 0%</span> <progress id="converterProgressBar" value="0" max="100"></progress> </div> <div id="mp3DownloadLinkContainer"></div>
+    </div>
 
     <!-- Audio Elements -->
-    <audio id="clickSound" src="effect/click.mp3" preload="auto"></audio>
-    <audio id="errorSound" src="effect/wrong.mp3" preload="auto"></audio>
-
+    <audio id="clickSound" src="effect/click.mp3" preload="auto" style="display: none;"></audio>
+    <audio id="errorSound" src="effect/wrong.mp3" preload="auto" style="display: none;"></audio>
 
     <script>
         // === Element References ===
-        // (Same as before, no lamejsCheckDiv)
         const createOfferBtn = document.getElementById('createOfferBtn'); const submitSdpBtn = document.getElementById('submitSdpBtn'); const localSdpText = document.getElementById('localSdp'); const remoteSdpText = document.getElementById('remoteSdp'); const connectionStatus = document.getElementById('connectionStatus'); const fileTransferSection = document.getElementById('file-transfer'); const fileInput = document.getElementById('fileInput'); const sendFileBtn = document.getElementById('sendFileBtn'); const clearSelectionBtn = document.getElementById('clearSelectionBtn'); const fileInfo = document.getElementById('fileInfo'); const selectedFilesListDiv = document.getElementById('selectedFilesList'); const progressInfo = document.getElementById('progressInfo'); const progressBar = document.getElementById('progressBar'); const progressText = document.getElementById('progressText'); const transferStatus = document.getElementById('transferStatus'); const downloadLinksContainer = document.getElementById('downloadLinksContainer');
-        const menuToggleBtn = document.getElementById('menuToggleBtn'); const sideMenu = document.getElementById('sideMenu'); const menuOverlay = document.getElementById('menuOverlay'); const refreshAppBtn = document.getElementById('refreshAppBtn'); const closeMenuBtn = document.getElementById('closeMenuBtn'); const fileTransferMenuBtn = document.getElementById('fileTransferMenuBtn'); const qrGeneratorMenuBtn = document.getElementById('qrGeneratorMenuBtn'); const audioConverterMenuBtn = document.getElementById('audioConverterMenuBtn'); const mainFileTransferAppDiv = document.getElementById('mainFileTransferApp'); const qrCodeGeneratorAppDiv = document.getElementById('qrCodeGeneratorApp'); const audioConverterAppDiv = document.getElementById('audioConverterApp');
+        const menuToggleBtn = document.getElementById('menuToggleBtn'); const sideMenu = document.getElementById('sideMenu'); const menuOverlay = document.getElementById('menuOverlay'); const refreshAppBtn = document.getElementById('refreshAppBtn'); const closeMenuBtn = document.getElementById('closeMenuBtn'); const homeMenuBtn = document.getElementById('homeMenuBtn'); const fileTransferMenuBtn = document.getElementById('fileTransferMenuBtn'); const qrGeneratorMenuBtn = document.getElementById('qrGeneratorMenuBtn'); const audioConverterMenuBtn = document.getElementById('audioConverterMenuBtn');
+        const homePageAppDiv = document.getElementById('homePageApp'); const mainFileTransferAppDiv = document.getElementById('mainFileTransferApp'); const qrCodeGeneratorAppDiv = document.getElementById('qrCodeGeneratorApp'); const audioConverterAppDiv = document.getElementById('audioConverterApp');
+        const goToFtBtn = document.getElementById('goToFtBtn'); const goToQrBtn = document.getElementById('goToQrBtn'); const goToAcBtn = document.getElementById('goToAcBtn');
         const qrInput = document.getElementById('qrInput'); const generateQrBtn = document.getElementById('generateQrBtn'); const downloadQrBtn = document.getElementById('downloadQrBtn'); const qrCodeDisplay = document.getElementById('qrCodeDisplay'); const qrStatus = document.getElementById('qrStatus'); const qrTypeLinkRadio = document.getElementById('qrTypeLink'); const qrTypeTextRadio = document.getElementById('qrTypeText'); const logoInput = document.getElementById('logoInput'); const logoPreview = document.getElementById('logoPreview'); const clearLogoBtn = document.getElementById('clearLogoBtn');
         const audioInput = document.getElementById('audioInput');
         const audioFileInfo = document.getElementById('audioFileInfo');
@@ -211,273 +179,168 @@
         const converterProgressBar = document.getElementById('converterProgressBar');
         const converterProgressText = document.getElementById('converterProgressText');
         const mp3DownloadLinkContainer = document.getElementById('mp3DownloadLinkContainer');
+        const submitSdpErrorMsg = document.getElementById('submitSdpErrorMsg');
+        const generateQrErrorMsg = document.getElementById('generateQrErrorMsg');
+        const convertAudioErrorMsg = document.getElementById('convertAudioErrorMsg');
         const clickSound = document.getElementById('clickSound');
         const errorSound = document.getElementById('errorSound');
 
         // === Global Variables ===
-        // --- File Transfer ---
         let peerConnection; let dataChannel; let filesToUpload = []; const receivingFiles = new Map(); let currentReceivingFileId = null; const chunkSize = 64 * 1024; const configuration = { iceServers: [ { urls: 'stun:stun.l.google.com:19302' }, { urls: 'stun:stun1.l.google.com:19302' } ] };
-        // --- QR Code ---
-        let selectedLogoDataUrl = null; const QR_CODE_SIZE = 256; const LOGO_MAX_SIZE_RATIO = 0.25; const LOGO_BG_PADDING = 4;
-        // --- Audio Converter ---
-        let selectedAudioFile = null;
-        let conversionInProgress = false;
-        let audioContext = null; // Initialize as null
+        let selectedLogoDataUrl = null; const QR_CODE_SIZE = 256; const LOGO_MAX_SIZE_RATIO = 0.25; const LOGO_BG_PADDING = 4; const QR_PADDING = 15;
+        let selectedAudioFile = null; let conversionInProgress = false; let audioContext = null;
 
-        // === Sound & UI Feedback Functions ===
-        function playClickSound() { if (clickSound) { clickSound.currentTime = 0; clickSound.play().catch(e=>console.warn("Click sound error:", e)); } }
-        function playErrorSound() { if (errorSound) { errorSound.currentTime = 0; errorSound.play().catch(e=>console.warn("Error sound error:", e)); } }
+        // === Sound & UI Feedback ===
+        function playClickSound() { if (clickSound) { try { clickSound.currentTime = 0; clickSound.play(); } catch(e) { console.warn("Click sound error:", e); } } }
+        function playErrorSound() { if (errorSound) { try { errorSound.currentTime = 0; errorSound.play(); } catch(e) { console.warn("Error sound error:", e); } } }
         function triggerButtonShake(buttonElement) { if (buttonElement) { buttonElement.classList.add('button-error-shake'); setTimeout(() => buttonElement.classList.remove('button-error-shake'), 500); } }
 
-        // === Side Menu Functions ===
+        // === Side Menu ===
         function openMenu() { sideMenu.classList.add('active'); menuOverlay.classList.add('active'); menuToggleBtn.classList.add('active'); menuToggleBtn.setAttribute('aria-expanded', 'true'); }
         function closeMenu() { sideMenu.classList.remove('active'); menuOverlay.classList.remove('active'); menuToggleBtn.classList.remove('active'); menuToggleBtn.setAttribute('aria-expanded', 'false'); }
 
-        // === App View Switching Functions ===
-        function showFileTransfer() { playClickSound(); mainFileTransferAppDiv.style.display = 'block'; qrCodeGeneratorAppDiv.style.display = 'none'; audioConverterAppDiv.style.display = 'none'; document.title = "Direct File Transfer"; closeMenu(); console.log("Switched to File Transfer view"); }
-        function showQrGenerator() { playClickSound(); mainFileTransferAppDiv.style.display = 'none'; qrCodeGeneratorAppDiv.style.display = 'block'; audioConverterAppDiv.style.display = 'none'; document.title = "QR Code Generator"; closeMenu(); resetQrGeneratorState(); console.log("Switched to QR Generator view"); }
-        function showAudioConverter() {
-            playClickSound();
-             if (!audioContext) {
-                 alert("Audio Converter requires Web Audio API, not supported or failed to initialize.");
-                 closeMenu(); showFileTransfer(); return;
-             }
-            mainFileTransferAppDiv.style.display = 'none';
-            qrCodeGeneratorAppDiv.style.display = 'none';
-            audioConverterAppDiv.style.display = 'block';
-            document.title = "Audio Converter";
-            closeMenu();
-            resetAudioConverterState();
-            // Removed checkLameJsStatus call
-            console.log("Switched to Audio Converter view");
+        // === App View Switching & History Management ===
+        function updateView(viewName, push = true) {
+            console.log(`Update view: ${viewName}, Push: ${push}`);
+            homePageAppDiv.style.display = 'none'; mainFileTransferAppDiv.style.display = 'none'; qrCodeGeneratorAppDiv.style.display = 'none'; audioConverterAppDiv.style.display = 'none';
+            let targetDiv = homePageAppDiv, pageTitle = "Direct Tools: Home", state = { view: 'home' }, hash = '#home';
+            switch(viewName) {
+                case 'fileTransfer': targetDiv = mainFileTransferAppDiv; pageTitle = "Direct File Transfer"; state = { view: 'fileTransfer' }; hash = '#filetransfer'; break;
+                case 'qrGenerator': targetDiv = qrCodeGeneratorAppDiv; pageTitle = "QR Code Generator"; state = { view: 'qrGenerator' }; hash = '#qrgenerator'; resetQrGeneratorState(); break;
+                case 'audioConverter':
+                    if (!audioContext) { try { audioContext = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { alert("Audio Converter cannot work: Web Audio API not supported/failed."); showHome(true); return; } }
+                    targetDiv = audioConverterAppDiv; pageTitle = "Audio Converter"; state = { view: 'audioConverter' }; hash = '#audioconverter'; resetAudioConverterState(); break;
+            }
+            targetDiv.style.display = 'block'; document.title = pageTitle; closeMenu();
+            if (push && window.location.hash !== hash) { history.pushState(state, pageTitle, hash); }
+            else if (!push && window.location.hash !== hash) { history.replaceState(state, pageTitle, hash); }
         }
+        function showHome(push = true) { playClickSound(); updateView('home', push); }
+        function showFileTransfer(push = true) { playClickSound(); updateView('fileTransfer', push); }
+        function showQrGenerator(push = true) { playClickSound(); updateView('qrGenerator', push); }
+        function showAudioConverter(push = true) { playClickSound(); updateView('audioConverter', push); } // Let updateView handle context check
 
+        // Handle Back/Forward Button Clicks
+        window.addEventListener('popstate', (event) => {
+            console.log("Popstate:", event.state);
+            if (event.state && event.state.view) { updateView(event.state.view, false); }
+            else { showHome(false); } // Default to home if no state
+        });
 
-        // === WebRTC & Core Logic (File Transfer) ===
-        function initializePeerConnection() { try { if (peerConnection && peerConnection.connectionState !== 'closed') { peerConnection.close(); } peerConnection = new RTCPeerConnection(configuration); localSdpText.value = ''; resetTransferState(); peerConnection.onicecandidate = event => { if (peerConnection.localDescription && event.candidate) { localSdpText.value += '\n' + JSON.stringify(event.candidate); } else if (!event.candidate) { console.log("ICE gather complete."); } }; peerConnection.ondatachannel = event => { dataChannel = event.channel; setupDataChannelEvents(); }; peerConnection.oniceconnectionstatechange = () => { const state = peerConnection.iceConnectionState; console.log(`ICE State: ${state}`); if (['disconnected', 'failed', 'closed'].includes(state)) { if (!['failed', 'closed'].includes(peerConnection?.connectionState)) { updateConnectionStatusUI(`Status: ${state} (ICE)`, state); } deactivateFileTransferUI(); } }; peerConnection.onconnectionstatechange = () => { const state = peerConnection.connectionState; console.log(`Conn State: ${state}`); updateConnectionStatusUI(`Status: ${state}`, state); if (state === 'connected') { activateFileTransferUI(); } else if (['disconnected', 'failed', 'closed'].includes(state)) { deactivateFileTransferUI(); } }; } catch (error) { console.error("PC Init Error:", error); updateConnectionStatusUI(`Init Error: ${error.message}`, 'failed'); if (peerConnection) peerConnection.close(); peerConnection = null; resetTransferState(); } }
-        function setupDataChannelEvents() { if (!dataChannel) return; dataChannel.binaryType = 'arraybuffer'; dataChannel.onopen = () => { if(!connectionStatus.classList.contains('connected')) { updateConnectionStatusUI('Status: Connected', 'connected'); } activateFileTransferUI(); updateTransferStatus('Status: Ready', 'info'); }; dataChannel.onclose = () => { if (!['failed', 'closed', 'disconnected'].includes(peerConnection?.connectionState)) { updateConnectionStatusUI('Status: Disconnected (DC Closed)', 'disconnected'); } deactivateFileTransferUI(); updateTransferStatus('Status: Idle (DC Closed)', 'disconnected'); resetTransferState(); }; dataChannel.onerror = error => { updateTransferStatus(`Error: ${error.message || 'DC error'}`, 'failed'); if (!['failed', 'closed', 'disconnected'].includes(peerConnection?.connectionState)) { updateConnectionStatusUI('Status: Channel Error', 'failed'); } resetTransferState(); }; dataChannel.onmessage = event => { try { if (typeof event.data === 'string') { const data = JSON.parse(event.data); if (data.type === 'metadata' && data.payload?.fileId) { const { fileId, name, type, size } = data.payload; if (typeof name === 'undefined' || typeof size === 'undefined') throw new Error("Invalid metadata"); receivingFiles.set(fileId, { metadata: { fileId, name, type, size }, buffer: [], receivedSize: 0 }); currentReceivingFileId = fileId; updateTransferStatus(`Status: Receiving ${receivingFiles.size}: ${name}...`, 'info'); updateProgress(0); } else if (data.type === 'transfer-complete' && data.payload?.fileId) { const { fileId } = data.payload; if (receivingFiles.has(fileId)) { const fs = receivingFiles.get(fileId); if (fs.receivedSize === fs.metadata.size) { processReceivedFile(fileId); if (currentReceivingFileId === fileId) currentReceivingFileId = null; updateTransferStatus(`Status: Completed ${data.payload.name || fileId}`, 'connected'); } else { throw new Error(`Size mismatch ${fileId}: ${fs.receivedSize}/${fs.metadata.size}`); } } else { console.warn(`Complete for unknown ID: ${fileId}`); } } else { console.warn("Unknown string msg:", data); } } else if (event.data instanceof ArrayBuffer) { if (!currentReceivingFileId || !receivingFiles.has(currentReceivingFileId)) { return; } const fs = receivingFiles.get(currentReceivingFileId); fs.buffer.push(event.data); fs.receivedSize += event.data.byteLength; if (fs.metadata.size > 0) { const p = Math.min(100, Math.round((fs.receivedSize / fs.metadata.size) * 100)); updateProgress(p); } else if (fs.metadata.size === 0) { updateProgress(100); } if (fs.receivedSize > 500*1024*1024) { console.warn(`Mem warn ${fs.metadata.name}: ${formatBytes(fs.receivedSize)}`); } } else { console.warn("Unknown msg type:", typeof event.data); } } catch (error) { console.error('Msg Error:', error); updateTransferStatus(`Receive Error: ${error.message}`, 'failed'); resetTransferState(); } }; }
-        function processReceivedFile(fileId) { if (!receivingFiles.has(fileId)) return; const fs = receivingFiles.get(fileId); const { metadata, buffer, receivedSize } = fs; if (receivedSize !== metadata.size) { updateTransferStatus(`Error: Size mismatch ${metadata.name}. Failed.`, 'failed'); receivingFiles.delete(fileId); return; } const blob = new Blob(buffer, { type: metadata.type || 'application/octet-stream' }); let url = null; try { url = URL.createObjectURL(blob); const link = document.createElement('a'); link.href = url; link.download = metadata.name; link.textContent = `Download ${metadata.name} (${formatBytes(metadata.size)})`; link.classList.add('download-link'); downloadLinksContainer.appendChild(link); updateTransferStatus(`Status: ${metadata.name} received!`, 'connected'); receivingFiles.delete(fileId); } catch (error) { updateTransferStatus(`Link Error ${metadata.name}: ${error.message}`, 'failed'); receivingFiles.delete(fileId); if (url) { try { URL.revokeObjectURL(url); } catch (revokeError) { console.error("Revoke URL error:", revokeError); } } } }
-        async function sendFileContent(file, fileId) { return new Promise((resolve, reject) => { if (file.size === 0) { updateProgress(100); resolve(); return; } const reader = new FileReader(); let offset = 0; reader.onload = e => { try { if (dataChannel.readyState !== 'open') throw new Error(`DC closed chunk ${fileId}`); const chunk = e.target.result; if (dataChannel.bufferedAmount > chunkSize * 32) { setTimeout(() => reader.onload(e), 150); return; } dataChannel.send(chunk); offset += chunk.byteLength; if (file.size > 0) { const p = Math.min(100, Math.round((offset / file.size) * 100)); updateProgress(p); } if (offset < file.size) { setTimeout(readNextChunk, 0); } else { setTimeout(() => { resolve(); }, 50); } } catch (error) { reject(error); } }; reader.onerror = error => reject(new Error(`FileReader error: ${error.message || error}`)); function readNextChunk() { if (dataChannel.readyState !== 'open') { reject(new Error(`DC closed read ${fileId}`)); return; } if (dataChannel.bufferedAmount > chunkSize * 32) { setTimeout(readNextChunk, 150); return; } const slice = file.slice(offset, offset + chunkSize); reader.readAsArrayBuffer(slice); } readNextChunk(); }); }
+        // === WebRTC & File Transfer ===
+        function initializePeerConnection(){try{if(peerConnection&&peerConnection.connectionState!=='closed')peerConnection.close();peerConnection=new RTCPeerConnection(configuration);localSdpText.value='';remoteSdpText.value='';resetTransferState();peerConnection.onicecandidate=e=>{if(peerConnection.localDescription&&e.candidate)localSdpText.value+='\n'+JSON.stringify(e.candidate);};peerConnection.ondatachannel=e=>{dataChannel=e.channel;setupDataChannelEvents();};peerConnection.oniceconnectionstatechange=()=>{const s=peerConnection.iceConnectionState;if(['disconnected','failed','closed'].includes(s)){if(!['failed','closed'].includes(peerConnection?.connectionState))updateConnectionStatusUI(`Status: ${s} (ICE)`,s);deactivateFileTransferUI();}};peerConnection.onconnectionstatechange=()=>{const s=peerConnection.connectionState;updateConnectionStatusUI(`Status: ${s}`,s);if(s==='connected')activateFileTransferUI();else if(['disconnected','failed','closed'].includes(s))deactivateFileTransferUI();};}catch(e){updateConnectionStatusUI(`Init Error: ${e.message}`,'failed');if(peerConnection)peerConnection.close();peerConnection=null;resetTransferState();}}
+        function setupDataChannelEvents(){if(!dataChannel)return;dataChannel.binaryType='arraybuffer';dataChannel.onopen=()=>{if(!connectionStatus.classList.contains('connected'))updateConnectionStatusUI('Status: Connected','connected');activateFileTransferUI();updateTransferStatus('Status: Ready','info');};dataChannel.onclose=()=>{if(!['failed','closed','disconnected'].includes(peerConnection?.connectionState))updateConnectionStatusUI('Status: Disconnected (DC Closed)','disconnected');deactivateFileTransferUI();updateTransferStatus('Status: Idle (DC Closed)','disconnected');resetTransferState();};dataChannel.onerror=e=>{updateTransferStatus(`Error: ${e.message||'DC error'}`,'failed');if(!['failed','closed','disconnected'].includes(peerConnection?.connectionState))updateConnectionStatusUI('Status: Channel Error','failed');resetTransferState();};dataChannel.onmessage=event=>{try{if(typeof event.data==='string'){const d=JSON.parse(event.data);if(d.type==='metadata'&&d.payload?.fileId){const{fileId,name,type,size}=d.payload;if(name===undefined||size===undefined)throw new Error("Invalid metadata");receivingFiles.set(fileId,{metadata:{fileId,name,type,size},buffer:[],receivedSize:0});currentReceivingFileId=fileId;updateTransferStatus(`Receiving: ${name}...`,'info');updateProgress(0);}else if(d.type==='transfer-complete'&&d.payload?.fileId){const{fileId}=d.payload;if(receivingFiles.has(fileId)){const f=receivingFiles.get(fileId);if(f.receivedSize===f.metadata.size){processReceivedFile(fileId);if(currentReceivingFileId===fileId)currentReceivingFileId=null;updateTransferStatus(`${d.payload.name||fileId} Received!`,'connected');}else throw new Error(`Size mismatch ${fileId}`);}}}else if(event.data instanceof ArrayBuffer){if(!currentReceivingFileId||!receivingFiles.has(currentReceivingFileId))return;const f=receivingFiles.get(currentReceivingFileId);f.buffer.push(event.data);f.receivedSize+=event.data.byteLength;if(f.metadata.size>0){const p=Math.min(100,Math.round((f.receivedSize/f.metadata.size)*100));updateProgress(p);}else if(f.metadata.size===0)updateProgress(100);}}catch(e){updateTransferStatus(`Receive Error: ${e.message}`,'failed');resetTransferState();}};}
+        function processReceivedFile(fileId){if(!receivingFiles.has(fileId))return;const f=receivingFiles.get(fileId);const{metadata,buffer,receivedSize}=f;if(receivedSize!==metadata.size){updateTransferStatus(`Error: Size mismatch ${metadata.name}.`,'failed');receivingFiles.delete(fileId);return;}const blob=new Blob(buffer,{type:metadata.type||'app/octet-stream'});let url=null;try{url=URL.createObjectURL(blob);const link=document.createElement('a');link.href=url;link.download=metadata.name;link.textContent=`Download ${metadata.name} (${formatBytes(metadata.size)})`;link.classList.add('download-link');downloadLinksContainer.appendChild(link);updateTransferStatus(`${metadata.name} ready!`,'connected');receivingFiles.delete(fileId);}catch(e){updateTransferStatus(`Link Error ${metadata.name}.`,'failed');receivingFiles.delete(fileId);if(url)try{URL.revokeObjectURL(url);}catch(e){}}}
+        async function sendFileContent(file,fileId){return new Promise((resolve,reject)=>{if(file.size===0){updateProgress(100);resolve();return;}const reader=new FileReader();let offset=0;reader.onload=e=>{try{if(dataChannel.readyState!=='open')throw new Error(`DC closed`);const chunk=e.target.result;if(dataChannel.bufferedAmount>chunkSize*32){setTimeout(()=>reader.onload(e),150);return;}dataChannel.send(chunk);offset+=chunk.byteLength;if(file.size>0)updateProgress(Math.min(100,(offset/file.size)*100));if(offset<file.size)setTimeout(readNextChunk,0);else setTimeout(resolve,50);}catch(error){reject(error);}};reader.onerror=()=>reject(new Error(`FileReader error`));function readNextChunk(){if(dataChannel.readyState!=='open'){reject(new Error(`DC closed`));return;}if(dataChannel.bufferedAmount>chunkSize*32){setTimeout(readNextChunk,150);return;}const slice=file.slice(offset,offset+chunkSize);reader.readAsArrayBuffer(slice);}readNextChunk();});}
+        function updateConnectionStatusUI(message,state){if(!connectionStatus)return;connectionStatus.textContent=message;const s=['connected','disconnected','connecting','failed','info','warning'];let c=state.toLowerCase();if(['checking','new','completed'].includes(c))c='connecting';else if(c==='closed')c='disconnected';else if(!s.includes(c))c='info';connectionStatus.className='status '+c;}
+        function updateTransferStatus(message,state='info'){if(!transferStatus)return;transferStatus.textContent=message;const s=['connected','disconnected','connecting','failed','info','warning'];let c=state.toLowerCase();if(!s.includes(c))c='info';transferStatus.className='status '+c;}
+        function updateProgress(percentage){if(!progressBar||!progressText)return;const v=Math.max(0,Math.min(100,Math.round(percentage)));progressBar.value=v;progressText.textContent=`${v}%`;}
+        function activateFileTransferUI(){if(!fileTransferSection||!fileInput)return;fileTransferSection.style.display='block';fileInput.disabled=false;updateSelectedFilesUI();}
+        function deactivateFileTransferUI(){if(fileInput)fileInput.disabled=true;if(sendFileBtn)sendFileBtn.disabled=true;if(clearSelectionBtn)clearSelectionBtn.disabled=true;}
+        function formatBytes(bytes,decimals=2){if(bytes==null||isNaN(bytes)||bytes<0)return'N/A';if(bytes===0)return'0 Bytes';const k=1024;const dm=decimals<0?0:decimals;const sizes=['Bytes','KB','MB','GB','TB'];const i=Math.floor(Math.log(bytes)/Math.log(k));const si=Math.min(i,sizes.length-1);return parseFloat((bytes/Math.pow(k,si)).toFixed(dm))+' '+sizes[si];}
+        function updateSelectedFilesUI(){if(!selectedFilesListDiv||!fileInfo||!sendFileBtn||!clearSelectionBtn)return;selectedFilesListDiv.innerHTML='';let totalSize=0;if(filesToUpload.length===0){selectedFilesListDiv.textContent='No files selected yet.';fileInfo.textContent='Total: 0 files (0 Bytes)';sendFileBtn.disabled=true;clearSelectionBtn.disabled=true;}else{filesToUpload.forEach(file=>{const div=document.createElement('div');div.textContent=`${file.name} (${formatBytes(file.size)})`;selectedFilesListDiv.appendChild(div);totalSize+=file.size;});fileInfo.textContent=`Total: ${filesToUpload.length} file(s) (${formatBytes(totalSize)})`;const isConnected=dataChannel&&dataChannel.readyState==='open';sendFileBtn.disabled=!isConnected;clearSelectionBtn.disabled=false;}updateProgress(0);}
+        function resetTransferState(){filesToUpload=[];receivingFiles.clear();currentReceivingFileId=null;if(fileInput)fileInput.value='';if(downloadLinksContainer)downloadLinksContainer.innerHTML='';updateSelectedFilesUI();updateTransferStatus('Status: Idle','info');}
 
-        // === UI Update Helpers (File Transfer) ===
-        function updateConnectionStatusUI(message, state) { if(!connectionStatus) return; connectionStatus.textContent = message; const s = ['connected','disconnected','connecting','failed','info','warning']; let c=state.toLowerCase(); if(['checking','new','completed'].includes(c))c='connecting'; else if(c==='closed')c='disconnected'; else if(!s.includes(c))c='info'; connectionStatus.className='status '+c; }
-        function updateTransferStatus(message, state = 'info') { if(!transferStatus) return; transferStatus.textContent = message; const s = ['connected','disconnected','connecting','failed','info','warning']; let c=state.toLowerCase(); if(!s.includes(c))c='info'; transferStatus.className='status '+c; }
-        function updateProgress(percentage) { if(!progressBar || !progressText) return; const v = Math.max(0, Math.min(100, Math.round(percentage))); progressBar.value = v; progressText.textContent = `${v}%`; }
-        function activateFileTransferUI() { if(!fileTransferSection || !fileInput) return; fileTransferSection.style.display = 'block'; fileInput.disabled = false; updateSelectedFilesUI(); }
-        function deactivateFileTransferUI() { if(fileInput) fileInput.disabled = true; if(sendFileBtn) sendFileBtn.disabled = true; if(clearSelectionBtn) clearSelectionBtn.disabled = true; }
-        function formatBytes(bytes, decimals = 2) { if(bytes==null||typeof bytes==='undefined'||isNaN(bytes)||bytes<0)return'N/A'; if(bytes===0)return'0 Bytes'; const k=1024; const dm=decimals<0?0:decimals; const sizes=['Bytes','KB','MB','GB','TB','PB','EB','ZB','YB']; const i=Math.floor(Math.log(bytes)/Math.log(k)); const si=Math.min(i,sizes.length-1); return parseFloat((bytes/Math.pow(k,si)).toFixed(dm))+' '+sizes[si]; }
-        function updateSelectedFilesUI() { if(!selectedFilesListDiv || !fileInfo || !sendFileBtn || !clearSelectionBtn) return; selectedFilesListDiv.innerHTML = ''; let totalSize = 0; if (filesToUpload.length === 0) { selectedFilesListDiv.textContent = 'No files selected yet.'; fileInfo.textContent = 'Total: 0 files (0 Bytes)'; sendFileBtn.disabled = true; clearSelectionBtn.disabled = true; } else { filesToUpload.forEach(file => { const div = document.createElement('div'); div.textContent = `${file.name} (${formatBytes(file.size)})`; selectedFilesListDiv.appendChild(div); totalSize += file.size; }); fileInfo.textContent = `Total: ${filesToUpload.length} file(s) (${formatBytes(totalSize)})`; const isConnected = dataChannel && dataChannel.readyState === 'open'; sendFileBtn.disabled = !isConnected; clearSelectionBtn.disabled = false; } updateProgress(0); }
-        function resetTransferState() { console.log("Resetting transfer state..."); filesToUpload = []; receivingFiles.clear(); currentReceivingFileId = null; if(fileInput) fileInput.value = ''; if(downloadLinksContainer) downloadLinksContainer.innerHTML = ''; updateSelectedFilesUI(); updateTransferStatus('Status: Idle', 'info'); }
-
-         // === UI Update Helpers (QR Code Generator) ===
-         function updateQrStatus(message, state = 'info') { if(!qrStatus) return; qrStatus.textContent = message; const s = ['connected', 'disconnected', 'generating', 'failed', 'info', 'warning']; let c = state.toLowerCase(); if (!s.includes(c)) c = 'info'; qrStatus.className = 'status ' + c; }
-
-        // === QR Code Generator Logic ===
-        function resetQrGeneratorState() { if(!qrCodeGeneratorAppDiv.contains(qrInput)) return; qrInput.value = ''; qrTypeLinkRadio.checked = true; handleQrTypeChange(); clearSelectedLogo(); qrCodeDisplay.innerHTML = '<span>QR Code will appear here</span>'; downloadQrBtn.style.display = 'none'; updateQrStatus("Status: Ready", "info"); }
-        function handleQrTypeChange() { if(!qrInput) return; const selectedType = document.querySelector('input[name="qrInputType"]:checked').value; if (selectedType === 'link') { qrInput.placeholder = "https://example.com"; } else { qrInput.placeholder = "Enter text..."; } }
-        function handleLogoSelection(event) { if(!logoInput || !logoPreview) return; const file = event.target.files[0]; if (file && file.type.startsWith('image/')) { const reader = new FileReader(); reader.onload = (e) => { selectedLogoDataUrl = e.target.result; logoPreview.innerHTML = ` <img src="${selectedLogoDataUrl}" alt="Preview"> <span>${file.name} (${formatBytes(file.size)})</span> <button id="clearLogoBtn" onclick="clearSelectedLogo()">Clear</button> `; }; reader.onerror = (e) => { updateQrStatus("Error reading logo.", "failed"); clearSelectedLogo(); }; reader.readAsDataURL(file); } else if (file) { alert("Please select a valid image."); clearSelectedLogo(); } }
-        function clearSelectedLogo() { if(!logoInput || !logoPreview) return; playClickSound(); logoInput.value = ''; selectedLogoDataUrl = null; logoPreview.innerHTML = ` <span>No logo selected</span> <button id="clearLogoBtn" disabled style="margin-left: auto;">Clear Logo</button> `; }
-        async function generateQRCode() { playClickSound(); const textToEncode = qrInput.value.trim(); if (!textToEncode) { playErrorSound(); triggerButtonShake(generateQrBtn); updateQrStatus("Error: Input empty.", "failed"); return; } updateQrStatus("Status: Generating...", "generating"); qrCodeDisplay.innerHTML = ''; downloadQrBtn.style.display = 'none'; try { if (typeof QRCode === 'undefined') throw new Error("QRCode lib not loaded."); const tempDiv = document.createElement('div'); tempDiv.style.position = 'absolute'; tempDiv.style.left = '-9999px'; document.body.appendChild(tempDiv); new QRCode(tempDiv, { text: textToEncode, width: QR_CODE_SIZE, height: QR_CODE_SIZE, colorDark: "#000", colorLight: "#fff", correctLevel: QRCode.CorrectLevel.H }); await new Promise(resolve => setTimeout(resolve, 100)); const qrCanvasSource = tempDiv.querySelector('canvas'); const qrImageSource = tempDiv.querySelector('img'); if (!qrCanvasSource && !qrImageSource) throw new Error("QR generation failed."); const finalCanvas = document.createElement('canvas'); finalCanvas.width = QR_CODE_SIZE; finalCanvas.height = QR_CODE_SIZE; const ctx = finalCanvas.getContext('2d'); if (qrCanvasSource) { ctx.drawImage(qrCanvasSource, 0, 0); } else { ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, QR_CODE_SIZE, QR_CODE_SIZE); ctx.drawImage(qrImageSource, 0, 0, QR_CODE_SIZE, QR_CODE_SIZE); } if (selectedLogoDataUrl) { const logoImg = new Image(); logoImg.onload = () => { try { const logoMaxPx = QR_CODE_SIZE * LOGO_MAX_SIZE_RATIO; let logoW = logoImg.width, logoH = logoImg.height; if (logoW > logoMaxPx || logoH > logoMaxPx) { if (logoW > logoH) { logoH = (logoMaxPx / logoW) * logoH; logoW = logoMaxPx; } else { logoW = (logoMaxPx / logoH) * logoW; logoH = logoMaxPx; } } logoW = Math.floor(logoW); logoH = Math.floor(logoH); const dx = (QR_CODE_SIZE - logoW) / 2, dy = (QR_CODE_SIZE - logoH) / 2; ctx.fillStyle = '#fff'; const bgX = dx - LOGO_BG_PADDING, bgY = dy - LOGO_BG_PADDING, bgW = logoW + (LOGO_BG_PADDING * 2), bgH = logoH + (LOGO_BG_PADDING * 2); ctx.fillRect(bgX, bgY, bgW, bgH); ctx.drawImage(logoImg, dx, dy, logoW, logoH); qrCodeDisplay.innerHTML = ''; qrCodeDisplay.appendChild(finalCanvas); updateQrStatus("Status: QR w/ Logo Generated!", "connected"); downloadQrBtn.style.display = 'inline-block'; } catch(e){ qrCodeDisplay.innerHTML = ''; qrCodeDisplay.appendChild(finalCanvas); updateQrStatus("Warning: QR gen, logo draw failed.", "warning"); downloadQrBtn.style.display = 'inline-block';} document.body.removeChild(tempDiv); }; logoImg.onerror = () => { qrCodeDisplay.innerHTML = ''; qrCodeDisplay.appendChild(finalCanvas); updateQrStatus("Warning: QR gen, logo load failed.", "warning"); downloadQrBtn.style.display = 'inline-block'; document.body.removeChild(tempDiv); }; logoImg.src = selectedLogoDataUrl; } else { qrCodeDisplay.innerHTML = ''; qrCodeDisplay.appendChild(finalCanvas); updateQrStatus("Status: QR Generated!", "connected"); downloadQrBtn.style.display = 'inline-block'; document.body.removeChild(tempDiv); } } catch (error) { playErrorSound(); triggerButtonShake(generateQrBtn); qrCodeDisplay.innerHTML = '<span>Error generating QR</span>'; updateQrStatus(`Error: ${error.message}`, "failed"); downloadQrBtn.style.display = 'none'; const tempDiv = document.querySelector('div[style*="left: -9999px"]'); if (tempDiv) document.body.removeChild(tempDiv); } }
-        function downloadQRCode() { playClickSound(); const finalCanvas = qrCodeDisplay.querySelector('canvas'); if (finalCanvas) { try { const link = document.createElement('a'); link.href = finalCanvas.toDataURL('image/png'); link.download = 'qrcode.png'; document.body.appendChild(link); link.click(); document.body.removeChild(link); updateQrStatus("Download initiated.", "info"); } catch (e) { updateQrStatus("Error preparing download.", "failed"); } } else { updateQrStatus("Error: No QR canvas found.", "failed"); } }
+         // === QR Code Generator ===
+         function updateQrStatus(message, state = 'info') { if(!qrStatus) return; qrStatus.textContent = message; const s = ['connected','generating','failed','info','warning']; let c = state.toLowerCase(); if (!s.includes(c)) c = 'info'; qrStatus.className = 'status ' + c; }
+         function resetQrGeneratorState() { if(!qrCodeGeneratorAppDiv.contains(qrInput)) return; qrInput.value = ''; qrTypeLinkRadio.checked = true; handleQrTypeChange(); clearSelectedLogo(); qrCodeDisplay.innerHTML = '<span>QR Code will appear here</span>'; downloadQrBtn.style.display = 'none'; updateQrStatus("Status: Ready", "info"); if (generateQrErrorMsg) generateQrErrorMsg.textContent = ''; }
+         function handleQrTypeChange() { if(!qrInput) return; const selectedType = document.querySelector('input[name="qrInputType"]:checked').value; qrInput.placeholder = (selectedType === 'link') ? "https://example.com" : "Enter text..."; if (generateQrErrorMsg) generateQrErrorMsg.textContent = ''; }
+         function handleLogoSelection(event) { if(!logoInput || !logoPreview) return; const file = event.target.files[0]; if (file && file.type.startsWith('image/')) { const reader = new FileReader(); reader.onload = (e) => { selectedLogoDataUrl = e.target.result; logoPreview.innerHTML = ` <img src="${selectedLogoDataUrl}" alt="Preview"> <span>${file.name} (${formatBytes(file.size)})</span> <button id="clearLogoBtn" onclick="clearSelectedLogo()">Clear</button> `; }; reader.onerror = () => { updateQrStatus("Error reading logo.", "failed"); clearSelectedLogo(); }; reader.readAsDataURL(file); } else if (file) { alert("Please select a valid image."); clearSelectedLogo(); } }
+         function clearSelectedLogo() { if(!logoInput || !logoPreview) return; playClickSound(); logoInput.value = ''; selectedLogoDataUrl = null; logoPreview.innerHTML = ` <span>No logo selected</span> <button id="clearLogoBtn" disabled style="margin-left: auto;">Clear Logo</button> `; }
+         async function generateQRCode() { playClickSound(); if (generateQrErrorMsg) generateQrErrorMsg.textContent = ''; const textToEncode = qrInput.value.trim(); if (!textToEncode) { playErrorSound(); triggerButtonShake(generateQrBtn); const isLink = qrTypeLinkRadio.checked; if (generateQrErrorMsg) generateQrErrorMsg.textContent = isLink ? "Please enter or paste your Link first." : "Please enter your Text first."; updateQrStatus("Error: Input empty.", "failed"); return; } updateQrStatus("Status: Generating...", "generating"); qrCodeDisplay.innerHTML = ''; downloadQrBtn.style.display = 'none'; const FINAL_CANVAS_SIZE = QR_CODE_SIZE + (QR_PADDING * 2); let tempDiv = null; try { if (typeof QRCode === 'undefined') throw new Error("QRCode lib not loaded."); tempDiv = document.createElement('div'); tempDiv.style.cssText='position:absolute;left:-9999px;'; document.body.appendChild(tempDiv); new QRCode(tempDiv, { text: textToEncode, width: QR_CODE_SIZE, height: QR_CODE_SIZE, colorDark: "#000", colorLight: "#fff", correctLevel: QRCode.CorrectLevel.H }); await new Promise(resolve => setTimeout(resolve, 100)); const qrCanvasSource = tempDiv.querySelector('canvas'); const qrImageSource = tempDiv.querySelector('img'); if (!qrCanvasSource && !qrImageSource) throw new Error("QR generation failed."); const finalCanvas = document.createElement('canvas'); finalCanvas.width = FINAL_CANVAS_SIZE; finalCanvas.height = FINAL_CANVAS_SIZE; const ctx = finalCanvas.getContext('2d'); ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height); const qrDrawX = QR_PADDING, qrDrawY = QR_PADDING; if (qrCanvasSource) ctx.drawImage(qrCanvasSource, qrDrawX, qrDrawY); else ctx.drawImage(qrImageSource, qrDrawX, qrDrawY, QR_CODE_SIZE, QR_CODE_SIZE); const drawBorderAndDisplay = () => { ctx.strokeStyle = '#000000'; ctx.lineWidth = 1; ctx.strokeRect(0.5, 0.5, finalCanvas.width - 1, finalCanvas.height - 1); qrCodeDisplay.innerHTML = ''; qrCodeDisplay.appendChild(finalCanvas); downloadQrBtn.style.display = 'inline-block'; }; if (selectedLogoDataUrl) { const logoImg = new Image(); logoImg.onload = () => { try { const logoMaxPx = QR_CODE_SIZE * LOGO_MAX_SIZE_RATIO; let logoW = logoImg.width, logoH = logoImg.height; if (logoW > logoMaxPx || logoH > logoMaxPx) { if (logoW > logoH) { logoH = (logoMaxPx / logoW) * logoH; logoW = logoMaxPx; } else { logoW = (logoMaxPx / logoH) * logoW; logoH = logoMaxPx; } } logoW = Math.floor(logoW); logoH = Math.floor(logoH); const logoCenterX = qrDrawX + (QR_CODE_SIZE / 2), logoCenterY = qrDrawY + (QR_CODE_SIZE / 2); const dx = logoCenterX - (logoW / 2), dy = logoCenterY - (logoH / 2); ctx.fillStyle = '#FFFFFF'; const bgX = dx - LOGO_BG_PADDING, bgY = dy - LOGO_BG_PADDING, bgW = logoW + (LOGO_BG_PADDING * 2), bgH = logoH + (LOGO_BG_PADDING * 2); ctx.fillRect(bgX, bgY, bgW, bgH); ctx.drawImage(logoImg, dx, dy, logoW, logoH); drawBorderAndDisplay(); updateQrStatus("Status: QR w/ Logo Generated!", "connected"); } catch(e){ drawBorderAndDisplay(); updateQrStatus("Warning: QR gen, logo draw failed.", "warning"); } }; logoImg.onerror = () => { drawBorderAndDisplay(); updateQrStatus("Warning: QR gen, logo load failed.", "warning"); }; logoImg.src = selectedLogoDataUrl; } else { drawBorderAndDisplay(); updateQrStatus("Status: QR Generated!", "connected"); } } catch (error) { playErrorSound(); triggerButtonShake(generateQrBtn); qrCodeDisplay.innerHTML = '<span>Error generating QR</span>'; updateQrStatus(`Error: ${error.message}`, "failed"); downloadQrBtn.style.display = 'none'; } finally { if (tempDiv && document.body.contains(tempDiv)) document.body.removeChild(tempDiv); } }
+         function downloadQRCode() { playClickSound(); const finalCanvas = qrCodeDisplay.querySelector('canvas'); if (finalCanvas) { try { const link = document.createElement('a'); link.href = finalCanvas.toDataURL('image/png'); link.download = 'qrcode.png'; document.body.appendChild(link); link.click(); document.body.removeChild(link); updateQrStatus("Download initiated.", "info"); } catch (e) { updateQrStatus("Error preparing download.", "failed"); } } else { updateQrStatus("Error: No QR canvas found.", "failed"); } }
 
         // === UI Update Helpers (Audio Converter) ===
-        function updateConverterStatus(message, state = 'info') {
-            if (converterStatus) {
-                converterStatus.textContent = message;
-                const s = ['connected','converting','failed','info','warning'];
-                let c = state.toLowerCase(); if (!s.includes(c)) c = 'info';
-                converterStatus.className = 'status ' + c;
-            }
-        }
-        function updateConverterProgress(percentage) {
-            if (converterProgressBar && converterProgressText) {
-                const p = Math.max(0, Math.min(100, Math.round(percentage)));
-                converterProgressBar.value = p;
-                converterProgressText.textContent = `Progress: ${p}%`;
-            }
-        }
+        function updateConverterStatus(message, state = 'info') { if (converterStatus) { converterStatus.textContent = message; const s = ['connected','converting','failed','info','warning']; let c = state.toLowerCase(); if (!s.includes(c)) c = 'info'; converterStatus.className = 'status ' + c; } }
+        function updateConverterProgress(percentage) { if (converterProgressBar && converterProgressText) { const p = Math.max(0, Math.min(100, Math.round(percentage))); converterProgressBar.value = p; converterProgressText.textContent = `Progress: ${p}%`; } }
 
         // === Audio Converter Logic ===
-        function resetAudioConverterState() {
-            if (!audioConverterAppDiv.contains(audioInput)) return;
-            audioInput.value = ''; selectedAudioFile = null;
-            audioFileInfo.textContent = 'No file selected';
-            mp3BitrateSelect.value = "128";
-            mp3DownloadLinkContainer.innerHTML = '';
-            updateConverterStatus('Status: Idle', 'info');
-            updateConverterProgress(0);
-            conversionInProgress = false; convertAudioBtn.disabled = true; audioInput.disabled = false;
-            // Removed LameJS check div reset
-        }
-
-        // Removed checkLameJsStatus function
-
-        function handleAudioFileSelection(event) { // Simplified
-            if (!audioConverterAppDiv.contains(audioInput)) return;
-            const file = event.target.files[0];
-            selectedAudioFile = null; audioFileInfo.textContent = 'No file selected';
-            convertAudioBtn.disabled = true; // Always disable first
-            mp3DownloadLinkContainer.innerHTML = '';
-            updateConverterProgress(0); updateConverterStatus('Status: Idle', 'info'); // Reset status
-
-            if (file && (file.type.startsWith('audio/') || file.type.startsWith('video/') || file.name.toLowerCase().endsWith('.m4a'))) {
-                 selectedAudioFile = file;
-                 audioFileInfo.textContent = `Selected: ${file.name} (${formatBytes(file.size)})`;
-                 // Enable button - the check will happen on click
-                 convertAudioBtn.disabled = false;
-                 updateConverterStatus('Status: Ready to convert.', 'info');
-            } else if (file) {
-                 playErrorSound();
-                 audioFileInfo.textContent = `Error: Invalid file type.`;
-                 updateConverterStatus('Status: Invalid file', 'failed');
-                 convertAudioBtn.disabled = true; // Keep disabled
-            }
-            // Removed the checkLameJsStatus call here
-        }
-
+        function resetAudioConverterState() { if (!audioConverterAppDiv.contains(audioInput)) return; audioInput.value = ''; selectedAudioFile = null; audioFileInfo.textContent = 'No file selected'; mp3BitrateSelect.value = "128"; mp3DownloadLinkContainer.innerHTML = ''; updateConverterStatus('Status: Idle', 'info'); updateConverterProgress(0); conversionInProgress = false; if(convertAudioBtn) convertAudioBtn.disabled = false; if(audioInput) audioInput.disabled = false; if (convertAudioErrorMsg) convertAudioErrorMsg.textContent = ''; }
+        function handleAudioFileSelection(event) { if (!audioConverterAppDiv.contains(audioInput)) return; const file = event.target.files[0]; selectedAudioFile = null; audioFileInfo.textContent = 'No file selected'; convertAudioBtn.disabled = true; mp3DownloadLinkContainer.innerHTML = ''; updateConverterProgress(0); updateConverterStatus('Status: Idle', 'info'); if (convertAudioErrorMsg) convertAudioErrorMsg.textContent = ''; if (file && (file.type.startsWith('audio/') || file.type.startsWith('video/') || file.name.toLowerCase().endsWith('.m4a') || file.name.toLowerCase().endsWith('.wav'))) { selectedAudioFile = file; audioFileInfo.textContent = `Selected: ${file.name} (${formatBytes(file.size)})`; convertAudioBtn.disabled = false; updateConverterStatus('Status: Ready to convert.', 'info'); } else if (file) { playErrorSound(); audioFileInfo.textContent = `Error: Invalid file type.`; updateConverterStatus('Status: Invalid file', 'failed'); } else { resetAudioConverterState(); } }
         async function convertAudioToMp3() {
             if (!audioConverterAppDiv.contains(audioInput)) return;
-            if (!selectedAudioFile || conversionInProgress) return;
+            if (convertAudioErrorMsg) convertAudioErrorMsg.textContent = '';
 
-            // Check library just before conversion attempt
-            if (typeof lamejs === 'undefined' || typeof lamejs.Mp3Encoder === 'undefined') {
-                 playErrorSound();
-                 updateConverterStatus('Error: MP3 Library not loaded. Check connection/refresh.', 'failed');
-                 console.error("convertAudioToMp3: lamejs is not defined.");
-                 // Re-enable buttons on failure to allow retry
-                 conversionInProgress = false;
-                 convertAudioBtn.disabled = false; // Allow user to try again
-                 audioInput.disabled = false;
-                 return; // Stop
-            }
-             if (!audioContext) {
-                 playErrorSound();
-                 updateConverterStatus('Error: Web Audio API not available.', 'failed');
-                 console.error("convertAudioToMp3: AudioContext is not available.");
-                  // Re-enable buttons on failure
-                 conversionInProgress = false;
-                 convertAudioBtn.disabled = false;
-                 audioInput.disabled = false;
-                 return;
-            }
+            if (!selectedAudioFile) { playErrorSound(); triggerButtonShake(convertAudioBtn); if (convertAudioErrorMsg) convertAudioErrorMsg.textContent = 'Please choose an Audio/Video file first.'; updateConverterStatus('Status: No file selected', 'failed'); return; }
+            if (conversionInProgress) return;
+            if (typeof lamejs === 'undefined' || typeof lamejs.Mp3Encoder === 'undefined') { playErrorSound(); triggerButtonShake(convertAudioBtn); updateConverterStatus('Error: MP3 Library not loaded. Check connection/refresh.', 'failed'); console.error("lamejs not defined."); return; }
+            if (!audioContext) { playErrorSound(); triggerButtonShake(convertAudioBtn); updateConverterStatus('Error: Web Audio API not available.', 'failed'); console.error("AudioContext not available."); return; }
 
-            playClickSound(); conversionInProgress = true;
-            convertAudioBtn.disabled = true; audioInput.disabled = true; // Disable during process
-            mp3DownloadLinkContainer.innerHTML = '';
+            playClickSound(); conversionInProgress = true; convertAudioBtn.disabled = true; audioInput.disabled = true; mp3DownloadLinkContainer.innerHTML = '';
             updateConverterStatus('Status: Reading file...', 'converting'); updateConverterProgress(0);
             const reader = new FileReader();
             reader.onload = async (e) => {
                 try {
-                    const arrayBuffer = e.target.result;
-                    updateConverterStatus('Status: Decoding audio...', 'converting');
-                    const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
-                    updateConverterStatus('Status: Encoding MP3...', 'converting');
-                    const mp3Encoder = new lamejs.Mp3Encoder(audioBuffer.numberOfChannels, audioBuffer.sampleRate, parseInt(mp3BitrateSelect.value)); // This line might cause error if lamejs is structured differently
-                    const mp3Data = []; const sampleBlockSize = 1152 * 4;
-                    let totalSamples = audioBuffer.length; let samplesProcessed = 0;
-                    const pcmLeft = audioBuffer.getChannelData(0);
-                    const pcmRight = audioBuffer.numberOfChannels > 1 ? audioBuffer.getChannelData(1) : pcmLeft;
-                     function encodeChunk() {
-                         if (samplesProcessed >= totalSamples) {
-                             const finalMp3Block = mp3Encoder.flush(); if (finalMp3Block.length > 0) mp3Data.push(finalMp3Block);
-                             processEncodedData(mp3Data); return;
-                         }
+                    const arrayBuffer = e.target.result; updateConverterStatus('Status: Decoding audio...', 'converting');
+                    const audioBuffer = await audioContext.decodeAudioData(arrayBuffer); updateConverterStatus('Status: Encoding MP3...', 'converting');
+                    const mp3Encoder = new lamejs.Mp3Encoder(audioBuffer.numberOfChannels, audioBuffer.sampleRate, parseInt(mp3BitrateSelect.value));
+                    const mp3Data = []; const sampleBlockSize = 1152 * 4; let totalSamples = audioBuffer.length; let samplesProcessed = 0;
+                    const pcmLeft = audioBuffer.getChannelData(0); const pcmRight = audioBuffer.numberOfChannels > 1 ? audioBuffer.getChannelData(1) : pcmLeft;
+                    function encodeChunk() {
+                         if (samplesProcessed >= totalSamples) { const finalMp3Block = mp3Encoder.flush(); if (finalMp3Block.length > 0) mp3Data.push(finalMp3Block); processEncodedData(mp3Data); return; }
                          const L = new Int16Array(sampleBlockSize), R = new Int16Array(sampleBlockSize); let currentBlockSize = 0;
-                         for (let i = 0; i < sampleBlockSize && samplesProcessed < totalSamples; i++) {
-                             L[i] = Math.max(-32767, Math.min(32767, pcmLeft[samplesProcessed] * 32767));
-                             R[i] = (audioBuffer.numberOfChannels > 1) ? Math.max(-32767, Math.min(32767, pcmRight[samplesProcessed] * 32767)) : L[i];
-                             samplesProcessed++; currentBlockSize++;
-                         }
-                         const leftChunk = currentBlockSize < sampleBlockSize ? L.slice(0, currentBlockSize) : L;
-                         const rightChunk = currentBlockSize < sampleBlockSize ? R.slice(0, currentBlockSize) : R;
+                         for (let i = 0; i < sampleBlockSize && samplesProcessed < totalSamples; i++) { L[i] = Math.max(-32767, Math.min(32767, pcmLeft[samplesProcessed] * 32767)); R[i] = (audioBuffer.numberOfChannels > 1) ? Math.max(-32767, Math.min(32767, pcmRight[samplesProcessed] * 32767)) : L[i]; samplesProcessed++; currentBlockSize++; }
+                         const leftChunk = currentBlockSize < sampleBlockSize ? L.slice(0, currentBlockSize) : L; const rightChunk = currentBlockSize < sampleBlockSize ? R.slice(0, currentBlockSize) : R;
                          const mp3buf = mp3Encoder.encodeBuffer(leftChunk, rightChunk); if (mp3buf.length > 0) mp3Data.push(mp3buf);
                          const progress = Math.round((samplesProcessed / totalSamples) * 100); updateConverterProgress(progress);
                          if (progress % 5 === 0 || progress === 100) updateConverterStatus(`Status: Encoding MP3 (${progress}%)...`, 'converting');
                          setTimeout(encodeChunk, 0); // Yield
                      }
                      encodeChunk(); // Start
-                } catch (error) { // Catch errors during decoding or encoding start
-                    console.error('Audio Process Error:', error); playErrorSound();
+                } catch (error) {
+                    console.error('Audio Process Error:', error); playErrorSound(); triggerButtonShake(convertAudioBtn);
                     let errorMsg = `Error: Processing failed. ${error.message || ''}`;
-                    // Check if it's the 'v.default is not a constructor' or similar internal error
-                    if (error instanceof TypeError && error.message.includes("is not a constructor")) {
-                       errorMsg = `Error: Internal issue with MP3 Encoder Library. (${error.message})`;
-                    } else if (error.message && error.message.toLowerCase().includes("decodeaudiodata")) {
-                       errorMsg = `Error: Unsupported format or corrupted file.`;
-                    }
-                    updateConverterStatus(errorMsg, 'failed');
-                    // Re-enable buttons on processing error
-                    conversionInProgress = false; convertAudioBtn.disabled = false; audioInput.disabled = false;
+                    if (error instanceof DOMException && error.name === 'EncodingError') { errorMsg = `Error: Unsupported format or corrupted file.`; }
+                    else if (error instanceof TypeError && error.message.includes("is not a constructor")) { errorMsg = `Error: Issue with MP3 Encoder Library.`; }
+                    updateConverterStatus(errorMsg, 'failed'); conversionInProgress = false; convertAudioBtn.disabled = false; audioInput.disabled = false;
                 }
             };
-            reader.onerror = (e) => {
-                updateConverterStatus('Error: Could not read file.', 'failed');
-                 // Re-enable buttons on read error
-                conversionInProgress = false; convertAudioBtn.disabled = false; audioInput.disabled = false;
-            };
+            reader.onerror = (e) => { playErrorSound(); triggerButtonShake(convertAudioBtn); updateConverterStatus('Error: Could not read file.', 'failed'); conversionInProgress = false; convertAudioBtn.disabled = false; audioInput.disabled = false; };
             reader.readAsArrayBuffer(selectedAudioFile);
         }
-        function processEncodedData(mp3Data) {
-            if (!audioConverterAppDiv.contains(audioInput)) return;
-            const mp3Blob = new Blob(mp3Data, { type: 'audio/mpeg' });
-            const mp3Url = URL.createObjectURL(mp3Blob); const link = document.createElement('a'); link.href = mp3Url;
-            const originalName = selectedAudioFile.name; const baseName = originalName.substring(0, originalName.lastIndexOf('.')) || originalName;
-            link.download = `${baseName}.mp3`; link.textContent = `Download ${link.download} (${formatBytes(mp3Blob.size)})`;
-            link.classList.add('download-link'); mp3DownloadLinkContainer.innerHTML = ''; mp3DownloadLinkContainer.appendChild(link);
-            updateConverterStatus('Status: Conversion Complete!', 'connected'); updateConverterProgress(100);
-            conversionInProgress = false; convertAudioBtn.disabled = false; audioInput.disabled = false;
-        }
+        function processEncodedData(mp3Data) { if (!audioConverterAppDiv.contains(audioInput)) return; const mp3Blob = new Blob(mp3Data, { type: 'audio/mpeg' }); const mp3Url = URL.createObjectURL(mp3Blob); const link = document.createElement('a'); link.href = mp3Url; const originalName = selectedAudioFile.name; const baseName = originalName.substring(0, originalName.lastIndexOf('.')) || originalName; link.download = `${baseName}.mp3`; link.textContent = `Download ${link.download} (${formatBytes(mp3Blob.size)})`; link.classList.add('download-link'); mp3DownloadLinkContainer.innerHTML = ''; mp3DownloadLinkContainer.appendChild(link); updateConverterStatus('Status: Conversion Complete!', 'connected'); updateConverterProgress(100); conversionInProgress = false; convertAudioBtn.disabled = false; audioInput.disabled = false; }
 
-        // === Event Listeners ===
+        // === Event Listeners Setup ===
         document.addEventListener('DOMContentLoaded', () => {
-            // --- Initialize AudioContext ---
-            try {
-                audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                console.log("AudioContext initialized.");
-            } catch (e) {
-                console.error("Web Audio API not supported/failed.", e);
-            }
+            // Defer AudioContext creation
 
-            // --- Add All Other Listeners ---
-            // Menu
-            menuToggleBtn?.addEventListener('click', () => { sideMenu.classList.contains('active') ? closeMenu() : openMenu(); });
-            menuOverlay?.addEventListener('click', closeMenu);
-            closeMenuBtn?.addEventListener('click', closeMenu);
-            refreshAppBtn?.addEventListener('click', () => { playClickSound(); closeMenu(); setTimeout(() => { location.reload(); }, 150); });
-            fileTransferMenuBtn?.addEventListener('click', showFileTransfer);
-            qrGeneratorMenuBtn?.addEventListener('click', showQrGenerator);
-            audioConverterMenuBtn?.addEventListener('click', showAudioConverter);
+            // Add All Other Listeners
+            menuToggleBtn.addEventListener('click', () => { sideMenu.classList.contains('active') ? closeMenu() : openMenu(); });
+            menuOverlay.addEventListener('click', closeMenu);
+            closeMenuBtn.addEventListener('click', closeMenu);
+            refreshAppBtn.addEventListener('click', () => { playClickSound(); closeMenu(); setTimeout(() => { location.reload(); }, 150); });
+            homeMenuBtn.addEventListener('click', () => showHome());
+            fileTransferMenuBtn.addEventListener('click', () => showFileTransfer());
+            qrGeneratorMenuBtn.addEventListener('click', () => showQrGenerator());
+            audioConverterMenuBtn.addEventListener('click', () => showAudioConverter());
+            // Home Page Navigation Buttons
+            goToFtBtn.addEventListener('click', () => showFileTransfer());
+            goToQrBtn.addEventListener('click', () => showQrGenerator());
+            goToAcBtn.addEventListener('click', () => showAudioConverter());
             // File Transfer
-            createOfferBtn?.addEventListener('click', async () => { playClickSound(); updateConnectionStatusUI('Status: Initializing...', 'connecting'); if (peerConnection && peerConnection.connectionState !== 'closed') { peerConnection.close(); } localSdpText.value = ''; remoteSdpText.value = ''; resetTransferState(); initializePeerConnection(); if (!peerConnection) return; dataChannel = peerConnection.createDataChannel('fileTransferChannel', { ordered: true }); setupDataChannelEvents(); try { const offer = await peerConnection.createOffer(); await peerConnection.setLocalDescription(offer); localSdpText.value = JSON.stringify(peerConnection.localDescription); updateConnectionStatusUI('Status: Code Created. Copy ALL text...', 'connecting'); } catch (error) { updateConnectionStatusUI(`Offer Error: ${error.message}`, 'failed'); triggerButtonShake(createOfferBtn); if(peerConnection) { peerConnection.close(); peerConnection = null;} } });
-            submitSdpBtn?.addEventListener('click', async () => { const inputText = remoteSdpText.value.trim(); if (!inputText) { playErrorSound(); triggerButtonShake(submitSdpBtn); return; } playClickSound(); updateConnectionStatusUI('Status: Processing...', 'connecting'); let sdp; let candidates = []; try { try { const m = inputText.match(/{\s*"type"\s*:\s*"(offer|answer)".*?}/s); if (!m) throw Error(); sdp = JSON.parse(m[0]); } catch (e) { throw new Error(`Invalid Offer/Answer JSON`); } const cM = inputText.matchAll(/{[\s\S]*?("candidate"|"sdpMid"|"sdpMLineIndex")[\s\S]*?}/g); for (const m of cM) { try { const j = JSON.parse(m[0]); if (j.candidate !== undefined || (j.sdpMid !== undefined && j.sdpMLineIndex !== undefined)) candidates.push(new RTCIceCandidate(j)); } catch (e) { console.warn("Ignoring invalid candidate:", m[0], e); } } if (sdp.type === 'offer') { if (peerConnection && peerConnection.connectionState !== 'closed') { peerConnection.close(); } localSdpText.value = ''; resetTransferState(); initializePeerConnection(); if (!peerConnection) throw new Error("PC Re-init failed."); await peerConnection.setRemoteDescription(new RTCSessionDescription(sdp)); for (const c of candidates) { await peerConnection.addIceCandidate(c).catch(e=>console.warn("Add ICE Error:",e,c)); } const answer = await peerConnection.createAnswer(); await peerConnection.setLocalDescription(answer); localSdpText.value = JSON.stringify(peerConnection.localDescription); updateConnectionStatusUI('Status: Answer Created. Copy ALL text...', 'connecting'); } else if (sdp.type === 'answer') { if (!peerConnection || !peerConnection.localDescription || peerConnection.localDescription.type !== 'offer') { throw new Error("Answer received but no Offer sent/ready."); } await peerConnection.setRemoteDescription(new RTCSessionDescription(sdp)); for (const c of candidates) { await peerConnection.addIceCandidate(c).catch(e=>console.warn("Add ICE Error:",e,c)); } console.log('Answer processed.'); } else { throw new Error("Invalid SDP type."); } } catch (error) { updateConnectionStatusUI(`Error: ${error.message || error}`, 'failed'); playErrorSound(); triggerButtonShake(submitSdpBtn); if (peerConnection && peerConnection.connectionState !== 'closed') { peerConnection.close(); peerConnection = null; } resetTransferState(); } });
-            fileInput?.addEventListener('change', event => { const newlySelectedFiles = event.target.files; if (newlySelectedFiles && newlySelectedFiles.length > 0) { for (let i = 0; i < newlySelectedFiles.length; i++) { filesToUpload.push(newlySelectedFiles[i]); } updateSelectedFilesUI(); } event.target.value = ''; });
-            clearSelectionBtn?.addEventListener('click', () => { playClickSound(); filesToUpload = []; updateSelectedFilesUI(); });
-            sendFileBtn?.addEventListener('click', async () => { playClickSound(); if (!filesToUpload || filesToUpload.length === 0 || !dataChannel || dataChannel.readyState !== 'open') { updateTransferStatus('Error: No files or not connected.', 'failed'); return; } sendFileBtn.disabled = true; fileInput.disabled = true; clearSelectionBtn.disabled = true; downloadLinksContainer.innerHTML = ''; updateTransferStatus(`Status: Sending ${filesToUpload.length} files...`, 'info'); let filesSentSuccessfully = 0; for (let i = 0; i < filesToUpload.length; i++) { const file = filesToUpload[i]; const fileId = `${Date.now()}-${i}-${Math.random().toString(16).slice(2)}`; updateTransferStatus(`Sending ${i + 1}/${filesToUpload.length}: ${file.name}...`, 'info'); updateProgress(0); try { const metadata = { type: 'metadata', payload: { fileId, name: file.name, type: file.type || 'app/octet-stream', size: file.size } }; if (dataChannel.readyState !== 'open') throw new Error(`DC closed (meta)`); dataChannel.send(JSON.stringify(metadata)); await sendFileContent(file, fileId); if (dataChannel.readyState !== 'open') throw new Error(`DC closed (complete)`); dataChannel.send(JSON.stringify({ type: 'transfer-complete', payload: { fileId, name: file.name } })); updateTransferStatus(`${i + 1}/${filesToUpload.length} (${file.name}) sent!`, 'info'); filesSentSuccessfully++; } catch (error) { updateTransferStatus(`Error sending ${file.name}: ${error.message}. Aborting.`, 'failed'); sendFileBtn.disabled = false; fileInput.disabled = false; clearSelectionBtn.disabled = (filesToUpload.length === 0); return; } } updateTransferStatus(`All ${filesSentSuccessfully} files sent!`, 'connected'); sendFileBtn.disabled = false; fileInput.disabled = false; clearSelectionBtn.disabled = (filesToUpload.length === 0); });
+            createOfferBtn.addEventListener('click', async () => { if(submitSdpErrorMsg)submitSdpErrorMsg.textContent=''; playClickSound(); updateConnectionStatusUI('Initializing...', 'connecting'); if (peerConnection?.connectionState !== 'closed') peerConnection?.close(); localSdpText.value='';remoteSdpText.value=''; resetTransferState(); initializePeerConnection(); if (!peerConnection) return; dataChannel = peerConnection.createDataChannel('fileTransferChannel',{ordered:true}); setupDataChannelEvents(); try {const offer=await peerConnection.createOffer(); await peerConnection.setLocalDescription(offer); localSdpText.value=JSON.stringify(peerConnection.localDescription); updateConnectionStatusUI('Code Created. Copy ALL text...','connecting'); } catch (e) { updateConnectionStatusUI(`Offer Error: ${e.message}`,'failed'); triggerButtonShake(createOfferBtn); if(peerConnection)peerConnection.close();peerConnection=null; } });
+            submitSdpBtn.addEventListener('click', async () => { if(submitSdpErrorMsg) submitSdpErrorMsg.textContent=''; const remoteVal = remoteSdpText.value.trim(); const localVal = localSdpText.value.trim(); if (!remoteVal) { playErrorSound(); triggerButtonShake(submitSdpBtn); if (!localVal) { if(submitSdpErrorMsg)submitSdpErrorMsg.textContent='Please Generate or Paste Code first.'; } else { if(submitSdpErrorMsg)submitSdpErrorMsg.textContent='Please paste code from the other device.'; } updateConnectionStatusUI('Status: Input Missing','failed'); return; } playClickSound(); updateConnectionStatusUI('Processing...', 'connecting'); let sdp; let candidates = []; try { try { const m = remoteVal.match(/{\s*"type"\s*:\s*"(offer|answer)".*?}/s); if (!m) throw Error(); sdp = JSON.parse(m[0]); } catch (e) { throw new Error(`Invalid Offer/Answer JSON`); } const cM = remoteVal.matchAll(/{[\s\S]*?("candidate"|"sdpMid"|"sdpMLineIndex")[\s\S]*?}/g); for (const m of cM) { try { const j = JSON.parse(m[0]); if (j.candidate || (j.sdpMid && j.sdpMLineIndex !== undefined)) candidates.push(new RTCIceCandidate(j)); } catch (e) {} } if (sdp.type === 'offer') { if (peerConnection?.connectionState !== 'closed') peerConnection?.close(); localSdpText.value=''; resetTransferState(); initializePeerConnection(); if (!peerConnection) throw new Error("PC Re-init failed."); await peerConnection.setRemoteDescription(new RTCSessionDescription(sdp)); for (const c of candidates) await peerConnection.addIceCandidate(c).catch(e=>{}); const answer = await peerConnection.createAnswer(); await peerConnection.setLocalDescription(answer); localSdpText.value = JSON.stringify(peerConnection.localDescription); updateConnectionStatusUI('Answer Created. Copy ALL text...','connecting'); } else if (sdp.type === 'answer') { if (!peerConnection || !peerConnection.localDescription || peerConnection.localDescription.type !== 'offer') throw new Error("Answer received but no Offer sent/ready."); await peerConnection.setRemoteDescription(new RTCSessionDescription(sdp)); for (const c of candidates) await peerConnection.addIceCandidate(c).catch(e=>{}); } else throw new Error("Invalid SDP type."); } catch (error) { updateConnectionStatusUI(`Error: ${error.message || error}`,'failed'); playErrorSound(); triggerButtonShake(submitSdpBtn); if (peerConnection && peerConnection.connectionState !== 'closed'){ peerConnection.close(); peerConnection = null; } resetTransferState(); } });
+            fileInput.addEventListener('change', event => { const f = event.target.files; if (f && f.length > 0) { for (let i=0; i<f.length; i++) filesToUpload.push(f[i]); updateSelectedFilesUI(); } event.target.value = ''; });
+            clearSelectionBtn.addEventListener('click', () => { playClickSound(); filesToUpload = []; updateSelectedFilesUI(); });
+            sendFileBtn.addEventListener('click', async () => { playClickSound(); if (!filesToUpload || filesToUpload.length === 0 || !dataChannel || dataChannel.readyState !== 'open') { updateTransferStatus('Error: No files or not connected.', 'failed'); return; } sendFileBtn.disabled = true; fileInput.disabled = true; clearSelectionBtn.disabled = true; downloadLinksContainer.innerHTML = ''; updateTransferStatus(`Sending ${filesToUpload.length} file(s)...`, 'info'); let success=0; for (let i = 0; i < filesToUpload.length; i++) { const file = filesToUpload[i]; const fileId = `${Date.now()}-${i}`; updateTransferStatus(`Sending ${i + 1}/${filesToUpload.length}: ${file.name}...`, 'info'); updateProgress(0); try { const meta = { type:'metadata', payload: { fileId, name: file.name, type: file.type || 'app/octet-stream', size: file.size } }; if (dataChannel.readyState !== 'open') throw new Error(`DC closed (meta)`); dataChannel.send(JSON.stringify(meta)); await sendFileContent(file, fileId); if (dataChannel.readyState !== 'open') throw new Error(`DC closed (complete)`); dataChannel.send(JSON.stringify({ type: 'transfer-complete', payload: { fileId, name: file.name } })); success++; } catch (error) { updateTransferStatus(`Error sending ${file.name}. Aborting.`, 'failed'); sendFileBtn.disabled = false; fileInput.disabled = false; clearSelectionBtn.disabled = (filesToUpload.length === 0); return; } } updateTransferStatus(`All ${success} files sent!`, 'connected'); sendFileBtn.disabled = false; fileInput.disabled = false; clearSelectionBtn.disabled = (filesToUpload.length === 0); });
             // QR Generator
-            qrTypeLinkRadio?.addEventListener('change', handleQrTypeChange);
-            qrTypeTextRadio?.addEventListener('change', handleQrTypeChange);
-            logoInput?.addEventListener('change', handleLogoSelection);
-            generateQrBtn?.addEventListener('click', generateQRCode);
-            downloadQrBtn?.addEventListener('click', downloadQRCode);
+            qrTypeLinkRadio.addEventListener('change', handleQrTypeChange); qrTypeTextRadio.addEventListener('change', handleQrTypeChange); logoInput.addEventListener('change', handleLogoSelection); generateQrBtn.addEventListener('click', generateQRCode); downloadQrBtn.addEventListener('click', downloadQRCode);
             // Audio Converter
-            audioInput?.addEventListener('change', handleAudioFileSelection);
-            convertAudioBtn?.addEventListener('click', convertAudioToMp3);
+            audioInput.addEventListener('change', handleAudioFileSelection);
+            convertAudioBtn.addEventListener('click', convertAudioToMp3);
 
-            // --- Initialize App States & UI ---
+            // Initialize App States & UI
             resetTransferState(); resetQrGeneratorState(); resetAudioConverterState();
-            updateConnectionStatusUI('Status: Disconnected', 'disconnected');
-            deactivateFileTransferUI();
-            // Removed initial checkLameJsStatus call
 
-            // Show File Transfer App by default
-            mainFileTransferAppDiv.style.display = 'block';
-            qrCodeGeneratorAppDiv.style.display = 'none';
-            audioConverterAppDiv.style.display = 'none';
-            document.title = "Direct Tools: Transfer, QR, Convert";
+            // Show initial view based on hash or default to home
+            const currentHash = window.location.hash.substring(1);
+            let initialView = 'home';
+            if (currentHash === 'filetransfer') initialView = 'fileTransfer';
+            else if (currentHash === 'qrgenerator') initialView = 'qrGenerator';
+            else if (currentHash === 'audioconverter') initialView = 'audioConverter';
 
-            if (!audioContext && audioConverterMenuBtn) {
-                 console.warn("AudioContext not supported.");
-            }
+            if (initialView === 'home') { showHome(false); if(window.location.hash !== '#home') history.replaceState({ view: 'home' }, 'Direct Tools: Home', '#home'); }
+            else { updateView(initialView, false); }
         });
 
     </script>

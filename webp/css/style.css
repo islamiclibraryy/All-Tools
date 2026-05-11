@@ -3,12 +3,11 @@
    Theme: Futuristic Red/Black Glassmorphism
    ============================================= */
 
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Exo+2:wght@300;400;500;600&display=swap');
 
 /* ── CSS Variables ── */
 :root {
   --red:        #e8001c;
-  --red-glow:   #ff1a35;
+  --red-glow:   #FF2A40;
   --red-dark:   #900010;
   --black:      #050508;
   --black-2:    #0d0d12;
@@ -629,13 +628,18 @@ input[type="range"]::-webkit-slider-thumb {
 }
 .preview-placeholder {
   font-size: 2.5rem;
-  opacity: 0.15;
+  opacity: 0.6; /* Isey badha diya gaya hai */
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
 }
-.preview-placeholder p { font-size: 0.75rem; color: var(--muted); font-family: var(--font-body); }
+.preview-placeholder p { 
+  font-size: 0.75rem; 
+  color: #FFFFFF; /* Pure white for max contrast */
+  font-family: var(--font-body); 
+  font-weight: 600;
+}
 .preview-meta {
   padding: 0.75rem 1rem;
   border-top: 1px solid rgba(255,255,255,0.05);

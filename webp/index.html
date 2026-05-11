@@ -563,53 +563,24 @@
 
   </main>
 
-    <style>
-      .blog-promo-card {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        gap: 2rem;
-        padding: 2.5rem;
-        margin-top: 2rem;
-      }
-      .blog-promo-img-wrapper {
-        flex: 1;
-        width: 100%;
-      }
-      .blog-promo-text {
-        flex: 1.5;
-        width: 100%;
-      }
-      /* Mobile ke liye Responsive Fix */
-      @media (max-width: 768px) {
-        .blog-promo-card {
-          flex-direction: column;
-          padding: 1.5rem; /* Mobile par padding kam ki gayi hai taaki screen ke bahar na jaye */
-          gap: 1.5rem;
-        }
-        .blog-promo-img-wrapper, .blog-promo-text {
-          min-width: 100%;
-        }
-      }
-    </style>
-
-    <section class="section blog-preview" style="padding-top: 2rem;">
+    <section class="section blog-preview">
       <div class="section-inner">
         <div class="section-tag">Optimization Blog</div>
         <h2 class="section-title">Latest <span>Insights</span> & Guides</h2>
         
         <div class="glass-card reveal blog-promo-card">
           <div class="blog-promo-img-wrapper">
-            <img src="images/homepage-blog-promo.jpg" alt="Web performance optimization" style="width: 100%; height: auto; border-radius: 8px; border: 1px solid var(--border); box-shadow: 0 0 30px rgba(232,0,28,0.15); display: block;">
+            <img src="images/homepage-blog-promo.jpg" alt="Web performance optimization" class="blog-promo-img">
           </div>
           <div class="blog-promo-text">
-            <h3 style="font-family: var(--font-head); color: #fff; font-size: 1.5rem; margin-bottom: 1rem;">Master the Art of Web Performance</h3>
-            <p style="margin-bottom: 1.5rem; color: var(--text); opacity: 0.8; line-height: 1.6;">Learn how to boost your website speed, improve Core Web Vitals, and dominate search rankings using modern image formats and expert optimization techniques.</p>
-            <a href="blog/blog.html" class="btn-primary" style="display: inline-flex; font-family: var(--font-head);">Explore Our Blog</a>
+            <h3>Master the Art of Web Performance</h3>
+            <p>Learn how to boost your website speed, improve Core Web Vitals, and dominate search rankings using modern image formats and expert optimization techniques.</p>
+            <a href="blog/" class="btn-primary">Explore Our Blog</a>
           </div>
         </div>
       </div>
     </section>
+
 
 
   <!-- ======================================

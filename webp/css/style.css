@@ -7,7 +7,7 @@
 /* ── CSS Variables ── */
 :root {
   --red:        #e8001c;
-  --red-glow:   #FF2A40;
+  --red-glow:   #E8001C;
   --red-dark:   #900010;
   --black:      #050508;
   --black-2:    #0d0d12;
@@ -102,7 +102,7 @@ body::after {
   color: #fff;
   white-space: nowrap;
 }
-.logo span { color: var(--red); }
+.logo span, .footer span { color: #FF3B4D; }
 
 .nav { display: flex; gap: 2rem; align-items: center; }
 .nav a {

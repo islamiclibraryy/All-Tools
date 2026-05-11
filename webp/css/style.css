@@ -1245,3 +1245,41 @@ tr:hover td { background: rgba(232,0,28,0.04); }
 .toast.show { transform: translateX(0); }
 .toast.success { border-color: #22c55e; }
 .toast.error { border-color: var(--red-glow); }
+/* =========================================
+   NEW BLOG PROMO CARD (HOMEPAGE)
+   ========================================= */
+.blog-preview { padding-top: 2rem; }
+.blog-promo-card { display: flex; flex-direction: row; align-items: center; gap: 2rem; padding: 2.5rem; margin-top: 2rem; }
+.blog-promo-img-wrapper { flex: 1; width: 100%; }
+.blog-promo-img { width: 100%; height: auto; border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow-red); display: block; }
+.blog-promo-text { flex: 1.5; width: 100%; }
+.blog-promo-text h3 { font-family: var(--font-head); color: #fff; font-size: 1.5rem; margin-bottom: 1rem; }
+.blog-promo-text p { margin-bottom: 1.5rem; color: var(--text); opacity: 0.8; line-height: 1.6; }
+
+/* =========================================
+   TABLE RESPONSIVE SCROLL FIX (MOBILE)
+   ========================================= */
+.formats-table-wrap {
+  width: 100%;
+  overflow-x: auto; /* Mobile par left-right scroll add karega */
+  -webkit-overflow-scrolling: touch; /* iPhone users ke liye smooth scrolling */
+  margin-bottom: 1rem;
+  border-radius: var(--radius); /* Table border ko smooth rakhne ke liye */
+}
+
+.formats-table-wrap table {
+  min-width: 600px; /* Ye table ko sikudne nahi dega, jisse scroll trigger hoga */
+  width: 100%;
+}
+
+/* =========================================
+   MOBILE RESPONSIVENESS
+   ========================================= */
+@media (max-width: 768px) {
+  /* Blog Card Mobile Fix */
+  .blog-promo-card {
+    flex-direction: column;
+    padding: 1.5rem;
+    gap: 1.5rem;
+  }
+}

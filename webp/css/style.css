@@ -102,7 +102,9 @@ body::after {
   color: #fff;
   white-space: nowrap;
 }
-.logo span, .footer span { color: #FF3B4D; }
+.logo span, .footer span { 
+  color: var(--red) ; 
+}
 
 .nav { display: flex; gap: 2rem; align-items: center; }
 .nav a {

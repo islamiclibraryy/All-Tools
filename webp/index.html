@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- SEO Meta -->
-  <title>Free WebP Converter Online | Convert JPG &amp; PNG to WebP – Webp Moder by Shekh</title>
-  <meta name="description" content="Use our free WebP converter online to convert JPG, PNG, and JPEG images into optimized WebP format instantly. Fast, secure, responsive, and easy to use." />
-  <meta name="keywords" content="free WebP converter, WebP converter, convert image to WebP, online WebP converter, free image converter, JPG to WebP, PNG to WebP, image compression tool, JPEG to WebP" />
+  <title>Free Bulk WebP Converter Online | Batch Convert JPG &amp; PNG to WebP</title>
+  <meta name="description" content="Use our free bulk WebP converter online to batch convert up to 50 JPG, PNG, and JPEG images into optimized WebP format instantly. Download as ZIP. Fast & secure." />
+  <meta name="keywords" content="free WebP converter, bulk WebP converter, batch image converter, convert multiple images to WebP, online WebP converter, JPG to WebP, PNG to WebP, WebP ZIP download, image compression tool" />
   <meta name="robots" content="index, follow" />
   <meta name="author" content="Webp Moder by Shekh" />
   <link rel="canonical" href="https://islamiclibraryy.github.io/All-Tools/webp/" />
@@ -16,30 +16,31 @@
   <link rel="icon" type="image/png" sizes="16x16" href="https://islamiclibraryy.github.io/All-Tools/webp/icons/favicon.png">
   <link rel="apple-touch-icon" href="https://islamiclibraryy.github.io/All-Tools/webp/icons/favicon.png">
 
-  <!-- Open Graph -->
   <meta property="og:image" content="https://islamiclibraryy.github.io/All-Tools/webp/icons/favicon.png" />
   <meta property="og:image:width" content="512" />
   <meta property="og:image:height" content="512" />
   <meta name="twitter:image" content="https://islamiclibraryy.github.io/All-Tools/webp/icons/favicon.png" />
   <meta property="og:type"        content="website" />
-  <meta property="og:title"       content="Free WebP Converter Online – Webp Moder by Shekh" />
-  <meta property="og:description" content="Convert JPG, PNG, JPEG images to WebP format for free. Fast, browser-based image converter with quality control." />
+  <meta property="og:title"       content="Free Bulk WebP Converter Online – Webp Moder by Shekh" />
+  <meta property="og:description" content="Batch convert multiple JPG, PNG, JPEG images to WebP format for free. Download all as a ZIP file instantly in your browser." />
   <meta property="og:url"         content="https://islamiclibraryy.github.io/All-Tools/webp/" />
   <meta property="og:site_name"   content="Webp Moder by Shekh" />
 
-  <!-- Structured Data -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    "name": "Webp Moder by Shekh",
+    "name": "Webp Moder Bulk Converter by Shekh",
     "url": "https://islamiclibraryy.github.io/All-Tools/webp/",
-    "description": "Free online WebP converter. Convert JPG, PNG, JPEG to WebP format instantly.",
+    "description": "Free online bulk WebP converter. Batch convert up to 50 JPG, PNG, JPEG to WebP format instantly and download as ZIP.",
     "applicationCategory": "UtilitiesApplication",
     "operatingSystem": "All",
     "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
   }
   </script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Exo+2:wght@300;400;500;600&display=swap">
@@ -144,7 +145,7 @@
               <div class="formats-badge">
                 <span>JPG</span><span>PNG</span><span>JPEG</span>
               </div>
-              <input type="file" id="fileInput" accept="image/jpeg,image/jpg,image/png" style="display:none;" aria-label="File input for image upload" />
+              <input type="file" id="fileInput" accept="image/jpeg,image/jpg,image/png" hidden multiple style="display:none;" aria-label="File input for image upload" />
             </div>
 
             <!-- Quality Slider -->
@@ -156,58 +157,28 @@
               <input type="range" id="qualitySlider" min="10" max="100" value="80" style="--val:80%" aria-label="Quality slider" />
             </div>
 
+            <div id="queueCounterWrap" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; display: none;">
+  <span style="font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em;">Queue List</span>
+  <span id="queueCountBadge" style="font-size: 0.72rem; padding: 0.2rem 0.6rem; background: rgba(232,0,28,0.15); border: 1px solid rgba(232,0,28,0.3); border-radius: 100px; color: var(--red-glow); font-weight: 700;">0 / 50</span>
+</div>
+
             <!-- Progress Bar -->
+            <div id="bulkQueueContainer" class="bulk-queue" style="margin-top: 1.5rem;"></div>
+
             <div class="progress-wrap" id="progressWrap">
               <div class="progress-bar">
                 <div class="progress-fill" id="progressFill"></div>
               </div>
-              <p class="progress-text" id="progressText">Converting...</p>
+              <p class="progress-text" id="progressText">Converting: 0 / 0</p>
             </div>
 
-            <!-- Convert Button -->
-            <button class="convert-btn" id="convertBtn" disabled aria-label="Convert image to WebP">
-              ⚡ Convert to WebP
+            <button class="convert-btn" id="convertBtn" disabled aria-label="Convert all images to WebP">
+              ⚡ Convert All Images
             </button>
 
-            <!-- Download Button -->
-            <button class="download-btn" id="downloadBtn" aria-label="Download converted WebP image">
-              ⬇️ Download WebP Image
+            <button class="convert-btn" id="downloadZipBtn" style="display:none; margin-top: 1rem;" aria-label="Download all converted images as ZIP">
+              📦 Download All (ZIP)
             </button>
-
-            <!-- Preview Grid -->
-            <div class="preview-grid">
-              <!-- Original -->
-              <div class="preview-card">
-                <div class="preview-card-head">
-                  <span class="tag-original">ORIGINAL</span>
-                  <span id="origSize" style="font-size:0.72rem; color:var(--muted)"></span>
-                </div>
-                <div class="preview-img-wrap">
-                  <img id="origImg" src="" alt="Original uploaded image" style="display:none;" />
-                  <div class="preview-placeholder" id="origPlaceholder">
-                    <span>🖼️</span>
-                    <p>No image yet</p>
-                  </div>
-                </div>
-              </div>
-              <!-- Converted -->
-              <div class="preview-card">
-                <div class="preview-card-head">
-                  <span class="tag-converted">CONVERTED WebP</span>
-                  <span id="convSize" style="font-size:0.72rem; color:var(--muted)"></span>
-                </div>
-                <div class="preview-img-wrap">
-                  <img id="convImg" src="" alt="Converted WebP image preview" style="display:none;" />
-                  <div class="preview-placeholder" id="convPlaceholder">
-                    <span>✨</span>
-                    <p>Output appears here</p>
-                  </div>
-                </div>
-                <div class="preview-meta">
-                  <span id="sizeSaved" class="size-saved"></span>
-                </div>
-              </div>
-            </div>
 
           </div><!-- /tool-body -->
         </div><!-- /tool-box -->
@@ -265,8 +236,8 @@
 
           <article class="glass-card reveal reveal-delay-1">
             <div class="feature-icon">⚡</div>
-            <h3>Lightning Fast Conversion</h3>
-            <p>Convert images to WebP in milliseconds. No queue, no waiting, no server roundtrips. Our free WebP converter processes images instantly using your device's power.</p>
+            <h3>Lightning Fast Bulk Conversion</h3>
+            <p>Convert up to 50 images to WebP simultaneously. No queue, no waiting, no server roundtrips. Our engine processes multiple images instantly using your device's power.</p>
           </article>
 
           <article class="glass-card reveal reveal-delay-2">
@@ -282,21 +253,22 @@
           </article>
 
           <article class="glass-card reveal reveal-delay-1">
-            <div class="feature-icon">🚫</div>
-            <h3>No Sign-Up Required</h3>
-            <p>No accounts, no registration, no emails. Just open the page, upload your image, and convert. It's that simple. Our WebP converter is free forever with no strings attached.</p>
+            <div class="feature-icon">📦</div>
+            <h3>Smart ZIP Download</h3>
+            <p>Download your converted images individually, or pack them all into a single, smartly-named ZIP file with just one click. Perfect for managing large batches of images.</p>
           </article>
 
           <article class="glass-card reveal reveal-delay-2">
             <div class="feature-icon">📊</div>
-            <h3>Before &amp; After Comparison</h3>
-            <p>Preview your original and converted WebP image side-by-side. See exactly how much space you're saving with a real-time size comparison and percentage display.</p>
+            <h3>Interactive Preview Modal</h3>
+            <p>Click on any image in your queue to open an interactive popup. Compare your original and converted WebP images side-by-side to see exact space savings.</p>
           </article>
         </div>
       </div>
     </section>
 
     <div class="divider"></div>
+
 
     <!-- ======================================
          HOW TO CONVERT
@@ -305,41 +277,42 @@
       <div class="section-inner">
         <span class="section-tag">Step-by-Step Guide</span>
         <h2 class="section-title" id="howto-heading">How to <span>Convert Images to WebP</span></h2>
-        <p class="section-sub">Converting your images to WebP format has never been easier. Follow these four simple steps to optimize your images instantly.</p>
+        <p class="section-sub">Converting batches of images to WebP format has never been easier. Follow these four simple steps to optimize your images instantly.</p>
 
         <div class="steps-grid">
           <article class="glass-card step-card reveal">
             <div class="step-num">01</div>
             <div class="feature-icon" style="margin:0 auto 1rem;">📤</div>
-            <h3>Upload Image</h3>
-            <p>Drag and drop your JPG, PNG, or JPEG image onto the upload area, or click to browse your device files.</p>
+            <h3>Upload Images</h3>
+            <p>Drag and drop multiple JPG, PNG, or JPEG images (up to 50 at once) onto the upload area, or click to browse your device files.</p>
           </article>
 
           <article class="glass-card step-card reveal reveal-delay-1">
             <div class="step-num">02</div>
             <div class="feature-icon" style="margin:0 auto 1rem;">🎚️</div>
             <h3>Set Quality</h3>
-            <p>Adjust the compression quality slider to your preference. Higher quality means larger file size, lower quality means smaller file size.</p>
+            <p>Adjust the compression quality slider to your preference. This setting will apply to all the images currently in your queue.</p>
           </article>
 
           <article class="glass-card step-card reveal reveal-delay-2">
             <div class="step-num">03</div>
             <div class="feature-icon" style="margin:0 auto 1rem;">⚡</div>
-            <h3>Convert to WebP</h3>
-            <p>Click the "Convert to WebP" button. The conversion happens instantly in your browser — no uploading or waiting required.</p>
+            <h3>Convert All Images</h3>
+            <p>Click the "Convert All Images" button. The bulk conversion happens instantly right in your browser — watch the live progress bar.</p>
           </article>
 
           <article class="glass-card step-card reveal reveal-delay-3">
             <div class="step-num">04</div>
             <div class="feature-icon" style="margin:0 auto 1rem;">⬇️</div>
-            <h3>Download WebP</h3>
-            <p>Preview the converted image and compare file sizes. Click Download to save your optimized WebP file to your device.</p>
+            <h3>Download Files</h3>
+            <p>Click on any image to preview the Before & After. Download them individually using the icons, or hit "Download All (ZIP)" to get everything at once.</p>
           </article>
         </div>
       </div>
     </section>
 
     <div class="divider"></div>
+
 
     <!-- ======================================
          BENEFITS OF WEBP IMAGES
@@ -480,7 +453,15 @@
               <span>Is this WebP converter really free?</span>
               <span class="icon">+</span>
             </div>
-            <div class="faq-a">Yes, absolutely. Webp Moder by Shekh is 100% free with no hidden fees, no watermarks, no sign-up, and no limits on conversions. You can convert as many images as you want, completely free of charge.</div>
+            <div class="faq-a">Yes, absolutely. Webp Moder by Shekh is 100% free with no hidden fees, no watermarks, no sign-up, and no limits on total conversions. You can use it as much as you want, completely free of charge.</div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q">
+              <span>Can I convert multiple images at once? (Bulk Convert)</span>
+              <span class="icon">+</span>
+            </div>
+            <div class="faq-a">Yes! Our advanced batch processor allows you to upload and convert up to 50 images simultaneously. Once converted, you can download them individually or package them all into a single ZIP file with one click.</div>
           </div>
 
           <div class="faq-item">
@@ -504,7 +485,7 @@
               <span>What quality setting should I use?</span>
               <span class="icon">+</span>
             </div>
-            <div class="faq-a">For most websites, a quality setting between 75–85% provides an excellent balance between image quality and file size reduction. For photographs, 80% is ideal. For graphics with text, you may want to use 85–90%. For thumbnails or previews, 60–70% works well.</div>
+            <div class="faq-a">For most websites, a quality setting between 75–85% provides an excellent balance between image quality and file size reduction. For photographs, 80% is ideal. For graphics with text, you may want to use 85–90%.</div>
           </div>
 
           <div class="faq-item">
@@ -512,15 +493,7 @@
               <span>How much smaller will my WebP image be?</span>
               <span class="icon">+</span>
             </div>
-            <div class="faq-a">WebP images are typically 25–35% smaller than equivalent JPEG images and up to 26% smaller than PNG images at equivalent quality. The actual savings depend on the image content, original format, and quality setting you choose. Our tool shows you the exact size comparison after conversion.</div>
-          </div>
-
-          <div class="faq-item">
-            <div class="faq-q">
-              <span>Do all browsers support WebP images?</span>
-              <span class="icon">+</span>
-            </div>
-            <div class="faq-a">Yes, WebP is now supported by all major modern browsers including Google Chrome, Mozilla Firefox, Microsoft Edge, Apple Safari (version 14+), and Opera. Over 96% of internet users worldwide are using browsers that support WebP natively.</div>
+            <div class="faq-a">WebP images are typically 25–35% smaller than equivalent JPEG images and up to 26% smaller than PNG images at equivalent quality. Our tool shows you the exact size comparison and percentage saved after conversion.</div>
           </div>
 
           <div class="faq-item">
@@ -528,15 +501,15 @@
               <span>Will converting to WebP improve my website's SEO?</span>
               <span class="icon">+</span>
             </div>
-            <div class="faq-a">Yes, significantly. Google specifically recommends serving images in WebP format in its PageSpeed Insights tool. Smaller WebP images reduce page load time, improve Core Web Vitals scores (especially LCP), and contribute to better search engine rankings. Using our free WebP converter is one of the easiest SEO improvements you can make.</div>
+            <div class="faq-a">Yes, significantly. Google specifically recommends serving images in WebP format. Smaller WebP images reduce page load time, improve Core Web Vitals scores, and contribute to better search engine rankings.</div>
           </div>
 
           <div class="faq-item">
             <div class="faq-q">
-              <span>Is there a file size limit for conversion?</span>
+              <span>Is there an upload limit for conversion?</span>
               <span class="icon">+</span>
             </div>
-            <div class="faq-a">Since all conversion happens in your browser, the only limit is your device's available memory. In practice, our converter handles images up to several hundred MB without issues on modern devices. For very large files, we recommend using a desktop browser for best performance.</div>
+            <div class="faq-a">To ensure your browser doesn't crash and your device memory isn't overloaded, we have set a generous limit of 50 images per batch. If you have more images, you can simply clear the queue and convert the next batch of 50 immediately after downloading your ZIP!</div>
           </div>
         </div>
       </div>
@@ -643,6 +616,33 @@
       </p>
     </div>
   </footer>
+
+    <div id="previewModal" class="modal-overlay" style="display: none;">
+      <div class="modal-glass-card">
+        <div class="modal-header">
+          <h3>Image Preview</h3>
+          <button id="closeModalBtn" class="close-btn" aria-label="Close Preview">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="modal-side">
+            <span class="tag-original">ORIGINAL</span>
+            <div class="modal-img-wrap">
+              <img id="modalOrigImg" src="" alt="Original Image">
+            </div>
+            <p id="modalOrigSize" class="modal-size-text"></p>
+          </div>
+          <div class="modal-side">
+            <span class="tag-converted">CONVERTED WebP</span>
+            <div class="modal-img-wrap">
+              <img id="modalConvImg" src="" alt="Converted Image" style="display: none;">
+              <div id="modalConvPlaceholder" class="modal-placeholder">✨ Converting...</div>
+            </div>
+            <p id="modalConvSize" class="modal-size-text"></p>
+            <p id="modalSavings" class="size-saved"></p>
+          </div>
+        </div>
+      </div>
+    </div>
 
   <script src="js/script.js" defer></script>
 </body>

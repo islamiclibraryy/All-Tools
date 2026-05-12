@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 - Page Not Found | Webp Moder by Shekh</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Exo+2:wght@300;400;500;600&display=swap">
+
+  <link rel="stylesheet" href="css/style.css">
+  
+  <style>
+    /* Sirf center karne aur 404 text design ke liye CSS, NO BODY/BACKGROUND COLORS */
+    .error-container {
+      min-height: 80vh; 
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+    }
+    .error-code {
+      font-family: var(--font-head, 'Orbitron', sans-serif);
+      font-size: clamp(6rem, 15vw, 10rem);
+      font-weight: 800;
+      color: var(--red-glow, #e8001c);
+      line-height: 1;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 40px rgba(232,0,28,0.4);
+      animation: pulseGlow 2s infinite alternate;
+    }
+    .error-text {
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+    }
+    .error-sub {
+      color: var(--muted, #a0a0b0);
+      margin-bottom: 2.5rem;
+      max-width: 500px;
+      line-height: 1.6;
+    }
+    @keyframes pulseGlow {
+      from { text-shadow: 0 0 20px rgba(232,0,28,0.3); }
+      to { text-shadow: 0 0 50px rgba(232,0,28,0.6); }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="header" role="banner">
+    <a href="./" class="logo" aria-label="Webp Moder by Shekh Home">
+      Webp <span>Moder</span> by Shekh
+    </a>
+    <nav class="nav" role="navigation" aria-label="Main navigation">
+      <a href="./" class="active">Home</a>
+      <a href="blog/">Blog</a>
+      <a href="about/">About Us</a>
+      <a href="contact/">Contact Us</a>
+      <a href="privacy/">Privacy Policy</a>
+      <a href="disclaimer/">Disclaimer</a>
+    </nav>
+    <button class="hamburger" aria-label="Toggle mobile menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <nav class="mobile-nav" aria-label="Mobile navigation">
+    <a href="./">Home</a>
+    <a href="blog/">Blog</a>
+    <a href="about/">About Us</a>
+    <a href="contact/">Contact Us</a>
+    <a href="privacy/">Privacy Policy</a>
+    <a href="disclaimer/">Disclaimer</a>
+  </nav>
+
+  <main class="error-container reveal">
+    <div class="error-code">404</div>
+    <h1 class="error-text">Oops! You're lost in the void.</h1>
+    <p class="error-sub">The page you are looking for doesn't exist, has been moved, or maybe you just typed a wrong URL. Let's get you back to safety.</p>
+    
+    <a href="./" class="convert-btn" style="text-decoration:none; display:inline-flex; align-items:center; justify-content:center; gap:0.5rem; padding: 1rem 2rem; max-width: 300px;">
+      🏠 Return to Homepage
+    </a>
+  </main>
+
+  <footer class="footer" role="contentinfo">
+    <div class="footer-grid">
+      <div class="footer-col footer-brand">
+        <div class="logo">Webp <span>Moder</span> by Shekh</div>
+        <p>A free, fast, and private online WebP converter tool. Convert JPG, PNG, and JPEG images to optimized WebP format directly in your browser — no uploads, no fees, no limits.</p>
+        <div class="social-links">
+          <a href="#" class="social-link fb" aria-label="Facebook"></a>
+          <a href="#" class="social-link ig" aria-label="Instagram"></a>
+          <a href="#" class="social-link tw" aria-label="Twitter/X"></a>
+          <a href="#" class="social-link yt" aria-label="YouTube"></a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="./">Home</a></li>
+          <li><a href="blog/">Blog</a></li>
+          <li><a href="about/">About Us</a></li>
+          <li><a href="contact/">Contact Us</a></li>
+          <li><a href="privacy/">Privacy Policy</a></li>
+          <li><a href="disclaimer/">Disclaimer</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Tool Links</h4>
+        <ul>
+          <li><a href="./#tool">JPG to WebP</a></li>
+          <li><a href="./#tool">PNG to WebP</a></li>
+          <li><a href="./#tool">JPEG to WebP</a></li>
+          <li><a href="./#tool">Image Compressor</a></li>
+          <li><a href="./#tool">Free WebP Converter</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Stay Updated</h4>
+        <div class="newsletter-box">
+          <p>Get tips on image optimization, web performance, and SEO directly in your inbox. No spam, unsubscribe anytime.</p>
+          <div class="newsletter-input-wrap">
+            <input type="email" placeholder="your@email.com" aria-label="Email for newsletter" />
+            <button type="button">Join</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2026 Webp Moder by Shekh. All rights reserved.</p>
+      <p>
+        <a href="privacy/">Privacy Policy</a> &nbsp;·&nbsp;
+        <a href="disclaimer/">Disclaimer</a> &nbsp;·&nbsp;
+        <a href="contact/">Contact</a>
+      </p>
+    </div>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
